@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>مدیریت مشتریان و اسکن QR Code</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+  <style>
+    body { font-family: Tahoma, Arial; background: #f9fafb; margin: 0; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #007bff; color: white; }
+    tr:nth-child(even) { background: #f2f2f2; }
+    #qr-reader { margin: 20px auto; width: 300px; border: 3px solid #007bff; border-radius: 10px; background: #fff; padding: 10px; }
+    #client-info { display: none; background: white; padding: 15px; margin-top: 20px; border-radius: 8px; }
+    button { padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; margin-top: 10px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .checked { color: green; font-weight: bold; }
+    .unchecked { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>📋 لیست مشتریان</h2>
+  <table id="clientTable">
+    <thead>
+      <tr>
+        <th>نام</th>
+        <th>تخلص</th>
+        <th>شماره موبایل</th>
+        <th>ایمیل</th>
+        <th>تاریخ تولد</th>
+        <th>سن</th>
+        <th>Check-in</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>📷 اسکن QR Code مشتری</h2>
+  <div id="qr-reader"></div>
+
+  <div id="client-info">
+    <h3>اطلاعات مشتری:</h3>
+    <p>نام: <span id="name"></span></p>
+    <p>تخلص: <span id="lastname"></span></p>
+    <p>شماره موبایل: <span id="phone"></span></p>
+    <p>ایمیل: <span id="email"></span></p>
+    <p>تاریخ تولد: <span id="dob"></span></p>
+    <p>سن: <span id="age"></span></p>
+    <p>وضعیت Check-in: <span id="checkedIn"></span></p>
+    <button id="checkInBtn">✅ تایید حضور (Check-in)</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDb7emeInzx1u8xdvdPDXe4_KLETNShs9M",
+      authDomain: "registration-app-e4aa2.firebaseapp.com",
+      databaseURL: "https://registration-app-e4aa2-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "registration-app-e4aa2",
+      storageBucket: "registration-app-e4aa2.firebasestorage.app",
+      messagingSenderId: "266681980056",
+      appId: "1:266681980056:web:b827638b2cdded5dc8aced"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const tableBody = document.querySelector("#clientTable tbody");
+    const qrReader = new Html5Qrcode("qr-reader");
+    const clientInfoDiv = document.getElementById("client-info");
+    const checkInBtn = document.getElementById("checkInBtn");
+    let currentClientId = null;
+
+    function renderTable(data) {
+      tableBody.innerHTML = "";
+      Object.keys(data).forEach(id => {
+        const c = data[id];
+        const row = `<tr>
+          <td>${c.name}</td><td>${c.lastname}</td><td>${c.phone}</td>
+          <td>${c.email}</td><td>${c.dob}</td><td>${c.age}</td>
+          <td class="${c.checkedIn ? 'checked' : 'unchecked'}">${c.checkedIn ? "✅" : "❌"}</td>
+        </tr>`;
+        tableBody.insertAdjacentHTML("beforeend", row);
+      });
+    }
+
+    function loadClients() {
+      db.ref('clients/').get().then(s => {
+        if (s.exists()) renderTable(s.val());
+        else tableBody.innerHTML = "<tr><td colspan='7'>هیچ مشتری یافت نشد</td></tr>";
+      });
+    }
+
+    function displayClient(id, c) {
+      document.getElementById("name").textContent = c.name;
+      document.getElementById("lastname").textContent = c.lastname;
+      document.getElementById("phone").textContent = c.phone;
+      document.getElementById("email").textContent = c.email;
+      document.getElementById("dob").textContent = c.dob;
+      document.getElementById("age").textContent = c.age;
+      document.getElementById("checkedIn").textContent = c.checkedIn ? "✅" : "❌";
+      clientInfoDiv.style.display = "block";
+      currentClientId = id;
+    }
+
+    function scanSuccess(data) {
+      let id = data.trim();
+      if (id.includes("/clients/")) id = id.split("/clients/")[1];
+      db.ref('clients/' + id).get().then(s => {
+        if (s.exists()) {
+          displayClient(id, s.val());
+          qrReader.stop();
+        } else alert("مشتری یافت نشد!");
+      }).catch(err => alert("خطا در خواندن اطلاعات: " + err));
+    }
+
+    qrReader.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, scanSuccess);
+
+    checkInBtn.addEventListener("click", () => {
+      if (!currentClientId) return;
+      db.ref('clients/' + currentClientId + '/checkedIn').set(true).then(() => {
+        alert("✅ حضور مشتری تایید شد!");
+        loadClients();
+      });
+    });
+
+    loadClients();
+  </script>
+</body>
+</html>
