@@ -25,7 +25,7 @@
       margin-bottom: 20px;
     }
     .header img {
-      width: 180px; /* Bigger logo */
+      width: 180px;
       margin-bottom: 10px;
     }
     .header h2 {
@@ -43,7 +43,6 @@
       margin-bottom: 20px;
     }
 
-    /* Inline label + input */
     .form-group {
       display: flex;
       align-items: center;
@@ -150,7 +149,6 @@
         </div>
       </div>
 
-      <!-- Family Member Section -->
       <div class="form-box">
         <div id="familyMembers"></div>
         <button type="button" onclick="addMember()">+ Add Family Member</button>
@@ -224,6 +222,49 @@
         ageInput.value = age < 1 ? 0 : age;
       });
     }
+
+    // ✅ FORM SUBMIT
+    document.getElementById("regForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const data = {
+        Name: document.getElementById("name").value.trim(),
+        Lastname: document.getElementById("lastname").value.trim(),
+        Phone: document.getElementById("phone").value.trim(),
+        Email: document.getElementById("email").value.trim(),
+        DateOfBirth: document.getElementById("dob").value.trim(),
+        Age: document.getElementById("age").value.trim()
+      };
+
+      try {
+        const res = await fetch("https://sheetdb.io/api/v1/erhpj1zsj2dct", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: [data] })
+        });
+
+        if (res.ok) {
+          alert("✅ Registration successful!\nYour data is saved.\nGenerating QR code...");
+
+          // Simple QR code display
+          const qrData = `Name: ${data.Name} ${data.Lastname}\nPhone: ${data.Phone}`;
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
+          const img = document.createElement("img");
+          img.src = qrUrl;
+          img.alt = "QR Code";
+          img.style.display = "block";
+          img.style.margin = "20px auto";
+          document.querySelector(".container").appendChild(img);
+
+          document.getElementById("regForm").reset();
+        } else {
+          alert("⚠️ Error saving data! Please try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("⚠️ Something went wrong while connecting to SheetDB.");
+      }
+    });
   </script>
 </body>
 </html>
