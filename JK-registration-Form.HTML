@@ -25,7 +25,7 @@
       margin-bottom: 20px;
     }
     .header img {
-      width: 180px;  /* Bigger logo */
+      width: 180px; /* Bigger logo */
       margin-bottom: 10px;
     }
     .header h2 {
@@ -34,7 +34,6 @@
       color: #333;
     }
 
-    /* Box for main form */
     .form-box {
       background: #f9f9f9;
       padding: 20px;
@@ -44,20 +43,27 @@
       margin-bottom: 20px;
     }
 
-    label {
+    /* Inline label + input */
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      width: 140px;
       font-weight: 600;
-      display: block;
-      margin-top: 12px;
       color: #444;
     }
-    label .star {
+
+    .form-group label .star {
       color: red;
     }
 
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+    .form-group input,
+    .form-group select {
+      flex: 1;
+      padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 14px;
@@ -100,7 +106,6 @@
       <h2>Kassel JK Registration</h2>
     </div>
 
-    <!-- Language Selector -->
     <div class="lang-select">
       <label for="langSelect">🌍 Language</label>
       <select id="langSelect">
@@ -114,26 +119,38 @@
       <div class="form-box">
         <h3>Main Applicant</h3>
 
-        <label>Name <span class="star">*</span></label>
-        <input type="text" id="name" required>
+        <div class="form-group">
+          <label>Name <span class="star">*</span></label>
+          <input type="text" id="name" required>
+        </div>
 
-        <label>Lastname <span class="star">*</span></label>
-        <input type="text" id="lastname" required>
+        <div class="form-group">
+          <label>Lastname <span class="star">*</span></label>
+          <input type="text" id="lastname" required>
+        </div>
 
-        <label>Phone <span class="star">*</span></label>
-        <input type="text" id="phone" required>
+        <div class="form-group">
+          <label>Phone <span class="star">*</span></label>
+          <input type="text" id="phone" required>
+        </div>
 
-        <label>Email <span class="star">*</span></label>
-        <input type="email" id="email" required>
+        <div class="form-group">
+          <label>Email <span class="star">*</span></label>
+          <input type="email" id="email" required>
+        </div>
 
-        <label>Date of Birth <span class="star">*</span></label>
-        <input type="date" id="dob" required>
+        <div class="form-group">
+          <label>Date of Birth <span class="star">*</span></label>
+          <input type="date" id="dob" required>
+        </div>
 
-        <label>Age</label>
-        <input type="text" id="age" readonly>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="text" id="age" readonly>
+        </div>
       </div>
 
-      <!-- Family Member Section (no heading text) -->
+      <!-- Family Member Section -->
       <div class="form-box">
         <div id="familyMembers"></div>
         <button type="button" onclick="addMember()">+ Add Family Member</button>
@@ -164,27 +181,36 @@
       const div = document.createElement("div");
       div.classList.add("member");
       div.innerHTML = `
-        <label>Name <span class="star">*</span></label>
-        <input type="text" class="mname" required>
-        <label>Lastname <span class="star">*</span></label>
-        <input type="text" class="mlastname" required>
-        <label>Relation <span class="star">*</span></label>
-        <select class="mrelation" required>
-          <option value="Spouse">Spouse</option>
-          <option value="Child">Child</option>
-          <option value="Parent">Parent</option>
-          <option value="Brother">Brother</option>
-          <option value="Sister">Sister</option>
-          <option value="Other">Other</option>
-        </select>
-        <label>Date of Birth <span class="star">*</span></label>
-        <input type="date" class="mdob" required>
-        <label>Age</label>
-        <input type="text" class="mage" readonly>
+        <div class="form-group">
+          <label>Name <span class="star">*</span></label>
+          <input type="text" class="mname" required>
+        </div>
+        <div class="form-group">
+          <label>Lastname <span class="star">*</span></label>
+          <input type="text" class="mlastname" required>
+        </div>
+        <div class="form-group">
+          <label>Relation <span class="star">*</span></label>
+          <select class="mrelation" required>
+            <option value="Spouse">Spouse</option>
+            <option value="Child">Child</option>
+            <option value="Parent">Parent</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth <span class="star">*</span></label>
+          <input type="date" class="mdob" required>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="text" class="mage" readonly>
+        </div>
       `;
       document.getElementById("familyMembers").appendChild(div);
 
-      // Age auto calc for family
       const dobInput = div.querySelector(".mdob");
       const ageInput = div.querySelector(".mage");
       dobInput.addEventListener("change", function () {
