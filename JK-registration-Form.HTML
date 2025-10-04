@@ -3,13 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Kassel JK Registration</title>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function() { emailjs.init("kipvDDFhBGh-tXZoU"); })();
-  </script>
   <style>
     body { font-family: Tahoma, Arial; padding: 20px; background: #f9fafb; }
     input, select, button { margin: 5px 0; padding: 10px; width: 250px; }
@@ -22,15 +15,6 @@
 <body>
   <h2>Kassel JK Registration</h2>
 
-  <!-- Language Selector -->
-  <label>🌍 Language:
-    <select id="langSelect">
-      <option value="en">English</option>
-      <option value="de">Deutsch</option>
-      <option value="fa">فارسی</option>
-    </select>
-  </label>
-
   <form id="regForm">
     <h3>Main Applicant</h3>
     Name: <input type="text" id="name" required><br>
@@ -40,35 +24,15 @@
     Date of Birth: <input type="date" id="dob" required><br>
     Age: <input type="text" id="age" readonly><br>
 
-    <!-- Add Family Members -->
     <div id="familyMembers"></div>
     <button type="button" onclick="addMember()">+ Add Family Member</button><br><br>
 
     <button type="submit">Register</button>
   </form>
 
-  <h3>Your QR Code:</h3>
-  <canvas id="qrcode"></canvas>
-
   <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDb7emeInzx1u8xdvdPDXe4_KLETNShs9M",
-      authDomain: "registration-app-e4aa2.firebaseapp.com",
-      databaseURL: "https://registration-app-e4aa2-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "registration-app-e4aa2",
-      storageBucket: "registration-app-e4aa2.firebasestorage.app",
-      messagingSenderId: "266681980056",
-      appId: "1:266681980056:web:b827638b2cdded5dc8aced"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
     const dobField = document.getElementById('dob');
     const ageField = document.getElementById('age');
-    const qrCanvas = document.getElementById('qrcode');
-    const qr = new QRious({ element: qrCanvas, size: 200 });
 
     dobField.addEventListener('change', function() {
       const [year, month, day] = dobField.value.split('-').map(Number);
@@ -81,7 +45,6 @@
       ageField.value = age < 1 ? 0 : age;
     });
 
-    // Add Family Member
     function addMember() {
       const div = document.createElement("div");
       div.classList.add("member");
@@ -89,8 +52,7 @@
         <h4>Family Member</h4>
         Name: <input type="text" class="mname" required><br>
         Lastname: <input type="text" class="mlastname" required><br>
-        Relation: 
-        <select class="mrelation" required>
+        Relation: <select class="mrelation" required>
           <option value="Spouse">Spouse</option>
           <option value="Child">Child</option>
           <option value="Parent">Parent</option>
@@ -103,66 +65,66 @@
       `;
       document.getElementById("familyMembers").appendChild(div);
 
-      // Auto calculate age
       const dobInput = div.querySelector(".mdob");
       const ageInput = div.querySelector(".mage");
       dobInput.addEventListener("change", function() {
-        const [year, month, day] = dobInput.value.split('-').map(Number);
-        if (!year) { ageInput.value = ''; return; }
-        const dob = new Date(year, month - 1, day);
+        const [y, mo, d] = dobInput.value.split('-').map(Number);
+        if (!y) { ageInput.value = ''; return; }
+        const dDate = new Date(y, mo - 1, d);
         const today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        const m = today.getMonth() - dob.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-        ageInput.value = age < 1 ? 0 : age;
+        let a = today.getFullYear() - dDate.getFullYear();
+        const mm = today.getMonth() - dDate.getMonth();
+        if (mm < 0 || (mm === 0 && today.getDate() < dDate.getDate())) a--;
+        ageInput.value = a < 1 ? 0 : a;
       });
     }
 
-    // Submit Registration
     document.getElementById('regForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const lastname = document.getElementById('lastname').value;
-      const phone = document.getElementById('phone').value;
-      const dob = dobField.value;
-      const age = ageField.value;
-      const email = document.getElementById('email').value;
-      const clientId = 'client_' + Date.now();
+
+      const mainApplicant = {
+        Name: document.getElementById("name").value,
+        LastName: document.getElementById("lastname").value,
+        Phone: document.getElementById("phone").value,
+        Email: document.getElementById("email").value,
+        "Date Of Birth": document.getElementById("dob").value,
+        Age: document.getElementById("age").value,
+        Relation: "Main"
+      };
 
       let family = [];
       document.querySelectorAll('.member').forEach(m => {
         family.push({
-          name: m.querySelector('.mname').value,
-          lastname: m.querySelector('.mlastname').value,
-          relation: m.querySelector('.mrelation').value,
-          dob: m.querySelector('.mdob').value,
-          age: m.querySelector('.mage').value,
+          Name: m.querySelector('.mname').value,
+          LastName: m.querySelector('.mlastname').value,
+          Phone: "",
+          Email: "",
+          "Date Of Birth": m.querySelector('.mdob').value,
+          Age: m.querySelector('.mage').value,
+          Relation: m.querySelector('.mrelation').value
         });
       });
 
-      db.ref('clients/' + clientId).set({
-        name, lastname, phone, email, dob, age, family,
-        registeredAt: Date.now(),
-        checkedIn: false
+      const all = [ mainApplicant, ...family ];
+
+      fetch("https://sheetdb.io/api/v1/k0ivrenw10b4p", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: all })
+      })
+      .then(resp => resp.json())
+      .then(result => {
+        alert("✅ Data saved!");
+        document.getElementById("regForm").reset();
+        ageField.value = "";
+        document.getElementById("familyMembers").innerHTML = "";
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("❌ Failed to save data: " + err);
       });
-
-      const qrValue = `https://registration-app-e4aa2-default-rtdb.europe-west1.firebasedatabase.app/clients/${clientId}`;
-      qr.value = qrValue;
-
-      const qrImage = qrCanvas.toDataURL();
-      emailjs.send("service_7j0vadr", "template_umyqa2c", {
-        to_name: name,
-        to_email: email,
-        qr_image: qrImage,
-        registration_id: clientId
-      }).then(() => {
-        alert('✅ Registration completed! QR Code sent.');
-        this.reset();
-        ageField.value = '';
-        qr.value = '';
-        document.getElementById("familyMembers").innerHTML = '';
-      }).catch(err => alert('❌ Email error: ' + err));
     });
   </script>
 </body>
 </html>
+
