@@ -5,128 +5,199 @@
   <title>Kassel JK Registration</title>
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f4ff, #dbeafe); /* soft blue gradient */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;
     }
+
     .container {
-      background: white;
-      margin: 40px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      max-width: 500px;
-      width: 100%;
+      max-width: 650px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .header {
       text-align: center;
-    }
-    .logo {
-      width: 120px;
-      margin-bottom: 15px;
-    }
-    h2 {
       margin-bottom: 20px;
+    }
+    .header img {
+      width: 180px;  /* Bigger logo */
+      margin-bottom: 10px;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 28px;
       color: #333;
     }
+
+    /* Box for main form */
+    .form-box {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
     label {
+      font-weight: 600;
       display: block;
       margin-top: 12px;
-      font-weight: 600;
       color: #444;
-      text-align: left;
     }
+    label .star {
+      color: red;
+    }
+
     input, select {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
+      margin-top: 5px;
       border-radius: 8px;
+      border: 1px solid #ccc;
       font-size: 14px;
     }
+
     button {
+      margin-top: 20px;
       width: 100%;
       padding: 12px;
-      margin-top: 20px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
       border: none;
       border-radius: 8px;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
     }
     button:hover {
-      background: #1d4ed8;
+      background: #0056b3;
     }
+
     .member {
-      background: #f9fafb;
+      border: 1px solid #ddd;
       padding: 15px;
+      border-radius: 10px;
       margin-top: 15px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      background: #f0f0f0;
     }
-    .add-btn {
-      background: #10b981;
-      margin-top: 15px;
-    }
-    .add-btn:hover {
-      background: #059669;
-    }
-    #qrcode {
-      display: block;
-      margin: 20px auto;
-    }
+
     .lang-select {
-      margin-bottom: 20px;
+      margin-top: 10px;
+      float: right;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Logo -->
-    <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo" class="logo">
-    
-    <!-- Title -->
-    <h2>Kassel JK Registration</h2>
+    <div class="header">
+      <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
+      <h2>Kassel JK Registration</h2>
+    </div>
 
-    <!-- Language Dropdown -->
-    <label for="langSelect">🌍 Select Language:</label>
-    <select id="langSelect" class="lang-select">
-      <option value="en">English</option>
-      <option value="de">Deutsch</option>
-      <option value="fa">فارسی</option>
-    </select>
+    <!-- Language Selector -->
+    <div class="lang-select">
+      <label for="langSelect">🌍 Language</label>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fa">فارسی</option>
+      </select>
+    </div>
 
-    <!-- Registration Form -->
     <form id="regForm">
-      <label>Name:</label>
-      <input type="text" id="name" required>
-      
-      <label>Last Name:</label>
-      <input type="text" id="lastname" required>
-      
-      <label>Phone:</label>
-      <input type="text" id="phone" required>
-      
-      <label>Email:</label>
-      <input type="email" id="email" required>
-      
-      <label>Date of Birth:</label>
-      <input type="date" id="dob" required>
-      
-      <label>Age:</label>
-      <input type="text" id="age" readonly>
-      
-      <div id="familyMembers"></div>
-      <button type="button" class="add-btn" onclick="addMember()">+ Add Family Member</button>
-      
+      <div class="form-box">
+        <h3>Main Applicant</h3>
+
+        <label>Name <span class="star">*</span></label>
+        <input type="text" id="name" required>
+
+        <label>Lastname <span class="star">*</span></label>
+        <input type="text" id="lastname" required>
+
+        <label>Phone <span class="star">*</span></label>
+        <input type="text" id="phone" required>
+
+        <label>Email <span class="star">*</span></label>
+        <input type="email" id="email" required>
+
+        <label>Date of Birth <span class="star">*</span></label>
+        <input type="date" id="dob" required>
+
+        <label>Age</label>
+        <input type="text" id="age" readonly>
+      </div>
+
+      <!-- Family Member Section (no heading text) -->
+      <div class="form-box">
+        <div id="familyMembers"></div>
+        <button type="button" onclick="addMember()">+ Add Family Member</button>
+      </div>
+
       <button type="submit">Register</button>
     </form>
-    <canvas id="qrcode"></canvas>
   </div>
+
+  <script>
+    // Auto Age Calculation
+    const dobField = document.getElementById('dob');
+    const ageField = document.getElementById('age');
+
+    dobField.addEventListener('change', function () {
+      const [year, month, day] = dobField.value.split('-').map(Number);
+      if (!year) { ageField.value = ''; return; }
+      const dob = new Date(year, month - 1, day);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      ageField.value = age < 1 ? 0 : age;
+    });
+
+    // Add Family Member
+    function addMember() {
+      const div = document.createElement("div");
+      div.classList.add("member");
+      div.innerHTML = `
+        <label>Name <span class="star">*</span></label>
+        <input type="text" class="mname" required>
+        <label>Lastname <span class="star">*</span></label>
+        <input type="text" class="mlastname" required>
+        <label>Relation <span class="star">*</span></label>
+        <select class="mrelation" required>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Parent">Parent</option>
+          <option value="Brother">Brother</option>
+          <option value="Sister">Sister</option>
+          <option value="Other">Other</option>
+        </select>
+        <label>Date of Birth <span class="star">*</span></label>
+        <input type="date" class="mdob" required>
+        <label>Age</label>
+        <input type="text" class="mage" readonly>
+      `;
+      document.getElementById("familyMembers").appendChild(div);
+
+      // Age auto calc for family
+      const dobInput = div.querySelector(".mdob");
+      const ageInput = div.querySelector(".mage");
+      dobInput.addEventListener("change", function () {
+        const [year, month, day] = dobInput.value.split('-').map(Number);
+        if (!year) { ageInput.value = ''; return; }
+        const dob = new Date(year, month - 1, day);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+        ageInput.value = age < 1 ? 0 : age;
+      });
+    }
+  </script>
 </body>
 </html>
