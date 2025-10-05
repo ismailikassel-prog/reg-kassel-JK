@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration for Imamat Day Celebration</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;
+    }
+    .container {
+      max-width: 650px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .header { text-align: center; margin-bottom: 10px; }
+    .header img { width: 180px; margin-bottom: 10px; }
+    .header h2 { margin: 0; font-size: 26px; color: #222; font-weight: 700; }
+    .lang-select { text-align: left; margin: 10px 0 25px 10px; font-weight: 600; }
+    .form-box {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .form-group label { width: 140px; font-weight: 600; color: #444; }
+    .form-group label .star { color: red; }
+    .form-group input, .form-group select {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #0056b3; }
+    .member {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      background: #f0f0f0;
+    }
+    .removeBtn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: auto;
+      margin-top: 10px;
+    }
+    .removeBtn:hover { background: #b02a37; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
+      <h2>Registration for Imamat Day Celebration</h2>
+    </div>
+
+    <div class="lang-select">
+      <label for="langSelect">🌍 Language: </label>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fa">فارسی</option>
+      </select>
+    </div>
+
+    <form id="regForm">
+      <div class="form-box">
+        <div class="form-group"><label id="lblName">Name <span class="star">*</span></label><input type="text" id="name" required></div>
+        <div class="form-group"><label id="lblLastname">Lastname <span class="star">*</span></label><input type="text" id="lastname" required></div>
+        <div class="form-group">
+          <label id="lblGender">Gender <span class="star">*</span></label>
+          <select id="gender" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label id="lblPhone">Phone <span class="star">*</span></label><input type="text" id="phone" required></div>
+        <div class="form-group"><label id="lblEmail">Email <span class="star">*</span></label><input type="email" id="email" required></div>
+        <div class="form-group"><label id="lblDob">Date of Birth <span class="star">*</span></label><input type="date" id="dob" required></div>
+        <div class="form-group"><label id="lblAge">Age</label><input type="text" id="age" readonly></div>
+      </div>
+
+      <div class="form-box">
+        <div id="familyMembers"></div>
+        <button type="button" id="addFamilyBtn">+ Add Family Member</button>
+      </div>
+
+      <button type="submit" id="registerBtn">Register</button>
+    </form>
+  </div>
+
+  <script>
+    // 🌐 Translations
+    const translations = {
+      en: { name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register" },
+      de: { name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren" },
+      fa: { name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام" }
+    };
+
+    // 🌍 Language change
+    document.getElementById("langSelect").addEventListener("change", () => {
+      const lang = document.getElementById("langSelect").value;
+      const t = translations[lang];
+      if (!t) return;
+      document.getElementById("lblName").innerHTML = t.name + ' <span class="star">*</span>';
+      document.getElementById("lblLastname").innerHTML = t.lastname + ' <span class="star">*</span>';
+      document.getElementById("lblGender").innerHTML = t.gender + ' <span class="star">*</span>';
+      document.getElementById("lblPhone").innerHTML = t.phone + ' <span class="star">*</span>';
+      document.getElementById("lblEmail").innerHTML = t.email + ' <span class="star">*</span>';
+      document.getElementById("lblDob").innerHTML = t.dob + ' <span class="star">*</span>';
+      document.getElementById("lblAge").textContent = t.age;
+      document.getElementById("addFamilyBtn").textContent = t.addMember;
+      document.getElementById("registerBtn").textContent = t.register;
+      document.getElementById("gender").options[0].text = t.select;
+
+      // RTL support for Persian
+      if (lang === "fa") {
+        document.body.style.direction = "rtl";
+        document.body.style.textAlign = "right";
+      } else {
+        document.body.style.direction = "ltr";
+        document.body.style.textAlign = "left";
+      }
+    });
+
+    // 🧮 Age calculation
+    document.getElementById('dob').addEventListener('change', function() {
+      const dob = new Date(this.value);
+      if (!dob) return;
+      const diff = new Date().getFullYear() - dob.getFullYear();
+      document.getElementById('age').value = diff;
+    });
+
+    // ➕ Add Family Member
+    function addMember() {
+      const div = document.createElement("div");
+      div.classList.add("member");
+      div.innerHTML = `
+        <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" class="mname" required></div>
+        <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group">
+          <label>Relation <span class="star">*</span></label>
+          <select class="mrelation" required>
+            <option value="Spouse">Spouse</option>
+            <option value="Child">Child</option>
+            <option value="Parent">Parent</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Date of Birth <span class="star">*</span></label><input type="date" class="mdob" required></div>
+        <div class="form-group"><label>Age</label><input type="text" class="mage" readonly></div>
+        <button type="button" class="removeBtn">Remove</button>
+      `;
+      document.getElementById("familyMembers").appendChild(div);
+      div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
+      div.querySelector(".mdob").addEventListener("change", function() {
+        const dob = new Date(this.value);
+        const diff = new Date().getFullYear() - dob.getFullYear();
+        div.querySelector(".mage").value = diff;
+      });
+    }
+    document.getElementById("addFamilyBtn").addEventListener("click", addMember);
+
+    // 🗂️ Submit and Save to Google Sheet
+    document.getElementById("regForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const data = {
+        name: document.getElementById("name").value,
+        lastname: document.getElementById("lastname").value,
+        gender: document.getElementById("gender").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        dob: document.getElementById("dob").value,
+        age: document.getElementById("age").value
+      };
+
+      try {
+        await fetch("https://sheetdb.io/api/v1/erhpj1zsj2dct", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: [data] })
+        });
+
+        alert("✅ Thank you! Your registration was successful.");
+        document.getElementById("regForm").reset();
+      } catch (err) {
+        alert("❌ Error saving data. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
