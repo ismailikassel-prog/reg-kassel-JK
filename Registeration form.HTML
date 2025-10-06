@@ -18,10 +18,25 @@
       border-radius: 15px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
-    .header { text-align: center; margin-bottom: 10px; }
-    .header img { width: 180px; margin-bottom: 10px; }
-    .header h2 { margin: 0; font-size: 26px; color: #222; font-weight: 700; }
-    .lang-select { text-align: left; margin: 10px 0 25px 10px; font-weight: 600; }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .header img {
+      width: 180px;
+      margin-bottom: 10px;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 26px;
+      color: #222;
+      font-weight: 700;
+    }
+    .lang-select {
+      text-align: left;
+      margin: 10px 0 25px 10px;
+      font-weight: 600;
+    }
     .form-box {
       background: #f9f9f9;
       padding: 20px;
@@ -35,9 +50,16 @@
       align-items: center;
       margin-bottom: 12px;
     }
-    .form-group label { width: 140px; font-weight: 600; color: #444; }
-    .form-group label .star { color: red; }
-    .form-group input, .form-group select {
+    .form-group label {
+      width: 140px;
+      font-weight: 600;
+      color: #444;
+    }
+    .form-group label .star {
+      color: red;
+    }
+    .form-group input,
+    .form-group select {
       flex: 1;
       padding: 8px 10px;
       border-radius: 8px;
@@ -121,14 +143,13 @@
   </div>
 
   <script>
-    // 🌐 Translations
+    // 🌐 Language translations
     const translations = {
       en: { name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register" },
       de: { name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren" },
       fa: { name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام" }
     };
 
-    // 🌍 Language change
     document.getElementById("langSelect").addEventListener("change", () => {
       const lang = document.getElementById("langSelect").value;
       const t = translations[lang];
@@ -143,18 +164,11 @@
       document.getElementById("addFamilyBtn").textContent = t.addMember;
       document.getElementById("registerBtn").textContent = t.register;
       document.getElementById("gender").options[0].text = t.select;
-
-      // RTL support for Persian
-      if (lang === "fa") {
-        document.body.style.direction = "rtl";
-        document.body.style.textAlign = "right";
-      } else {
-        document.body.style.direction = "ltr";
-        document.body.style.textAlign = "left";
-      }
+      document.body.style.direction = lang === "fa" ? "rtl" : "ltr";
+      document.body.style.textAlign = lang === "fa" ? "right" : "left";
     });
 
-    // 🧮 Age calculation
+    // 🧮 Age Calculation
     document.getElementById('dob').addEventListener('change', function() {
       const dob = new Date(this.value);
       if (!dob) return;
@@ -162,7 +176,7 @@
       document.getElementById('age').value = diff;
     });
 
-    // ➕ Add Family Member
+    // 👨‍👩‍👧 Add Family Member
     function addMember() {
       const div = document.createElement("div");
       div.classList.add("member");
@@ -194,10 +208,10 @@
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // 🗂️ Submit and Save to Google Sheet
+    // ✅ Submit & Save to SheetDB
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      
+
       const data = {
         name: document.getElementById("name").value,
         lastname: document.getElementById("lastname").value,
@@ -205,20 +219,24 @@
         phone: document.getElementById("phone").value,
         email: document.getElementById("email").value,
         dob: document.getElementById("dob").value,
-        age: document.getElementById("age").value
+        age: document.getElementById("age").value,
       };
 
       try {
-        await fetch("https://sheetdb.io/api/v1/erhpj1zsj2dct", {
+        const res = await fetch("https://sheetdb.io/api/v1/095eetx6hrw1i", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [data] })
+          body: JSON.stringify({ data: [data] }),
         });
 
-        alert("✅ Thank you! Your registration was successful.");
-        document.getElementById("regForm").reset();
+        if (res.ok) {
+          alert("✅ Registration successful! Thank you for registering.");
+          document.getElementById("regForm").reset();
+        } else {
+          alert("❌ Error saving data. Please try again.");
+        }
       } catch (err) {
-        alert("❌ Error saving data. Please try again.");
+        alert("⚠️ Connection error. Please check your internet or SheetDB link.");
       }
     });
   </script>
