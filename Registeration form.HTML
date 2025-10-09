@@ -37,9 +37,6 @@
       margin: 10px 0 25px 10px;
       font-weight: 600;
     }
-    .lang-select label {
-      margin-right: 5px;
-    }
     .lang-select::before {
       content: "🌍";
       margin-right: 5px;
@@ -152,7 +149,7 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // 🌐 Language Translations
+    // 🌐 Translations
     const translations = {
       en: { name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register" },
       de: { name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren" },
@@ -163,7 +160,6 @@
       const lang = document.getElementById("langSelect").value;
       const t = translations[lang];
       if (!t) return;
-
       document.getElementById("lblName").innerHTML = t.name + ' <span class="star">*</span>';
       document.getElementById("lblLastname").innerHTML = t.lastname + ' <span class="star">*</span>';
       document.getElementById("lblGender").innerHTML = t.gender + ' <span class="star">*</span>';
@@ -174,26 +170,33 @@
       document.getElementById("addFamilyBtn").textContent = t.addMember;
       document.getElementById("registerBtn").textContent = t.register;
       document.getElementById("gender").options[0].text = t.select;
-
       document.body.style.direction = lang === "fa" ? "rtl" : "ltr";
       document.body.style.textAlign = lang === "fa" ? "right" : "left";
     });
 
-    // 🧮 Age Calculation
+    // 🧮 Auto Age
     document.getElementById('dob').addEventListener('change', function() {
       const dob = new Date(this.value);
-      if (!dob) return;
       const diff = new Date().getFullYear() - dob.getFullYear();
       document.getElementById('age').value = diff;
     });
 
-    // 👨‍👩‍👧 Add Family Member
+    // ➕ Add Family Member
     function addMember() {
       const div = document.createElement("div");
       div.classList.add("member");
       div.innerHTML = `
         <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" class="mname" required></div>
         <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group">
+          <label>Gender <span class="star">*</span></label>
+          <select class="mgender" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
         <div class="form-group">
           <label>Relation <span class="star">*</span></label>
           <select class="mrelation" required>
@@ -210,6 +213,7 @@
         <button type="button" class="removeBtn">Remove</button>
       `;
       document.getElementById("familyMembers").appendChild(div);
+
       div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
       div.querySelector(".mdob").addEventListener("change", function() {
         const dob = new Date(this.value);
@@ -219,7 +223,7 @@
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // 📤 Submit & Save Data
+    // 📤 Submit to SheetDB
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
@@ -233,35 +237,34 @@
         Age: document.getElementById("age").value
       };
 
-      // send main form
-      await fetch(sheetURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: [mainData] })
-      });
+      const allData = [mainData];
 
-      // send each family member
-      const members = document.querySelectorAll(".member");
-      for (const m of members) {
-        const memberData = {
+      document.querySelectorAll(".member").forEach(m => {
+        allData.push({
           name: m.querySelector(".mname").value,
           Lastname: m.querySelector(".mlastname").value,
-          gender: "", // ignored
+          gender: m.querySelector(".mgender").value,
           Phone: "",
           Email: "",
           DateOfBirth: m.querySelector(".mdob").value,
-          Age: m.querySelector(".mage").value
-        };
+          Age: m.querySelector(".mage").value,
+          Relation: m.querySelector(".mrelation").value
+        });
+      });
+
+      try {
         await fetch(sheetURL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [memberData] })
+          body: JSON.stringify({ data: allData })
         });
+        alert("✅ Registration submitted successfully!");
+        document.getElementById("regForm").reset();
+        document.getElementById("familyMembers").innerHTML = "";
+      } catch (err) {
+        alert("❌ Failed to submit data. Please try again.");
+        console.error(err);
       }
-
-      alert("✅ Registration submitted successfully!");
-      document.getElementById("regForm").reset();
-      document.getElementById("familyMembers").innerHTML = "";
     });
   </script>
 </body>
