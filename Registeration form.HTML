@@ -206,12 +206,14 @@
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
+      // 👤 Main user data (Family Admin)
       const mainData = {
         name: document.getElementById("name").value,
         Lastname: document.getElementById("lastname").value,
         gender: document.getElementById("gender").value,
         Phone: document.getElementById("phone").value,
         Email: document.getElementById("email").value,
+        Relation: "Family Admin",
         DateOfBirth: document.getElementById("dob").value,
         Age: document.getElementById("age").value
       };
