@@ -2,58 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registration for Imamat Day Celebration</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;
+      font-family: Arial, sans-serif;
+      background: url("https://i.ibb.co/yNHLW8h/background.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      padding: 20px;
     }
     .container {
-      max-width: 650px;
-      margin: 50px auto;
-      background: rgba(255,255,255,0.95);
-      padding: 30px 40px;
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.92);
       border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      padding: 25px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
-    .header { text-align:center; margin-bottom:10px; }
-    .header img { width:180px; margin-bottom:10px; }
-    .header h2 { margin:0; font-size:26px; color:#222; font-weight:700; }
-    .lang-select { text-align:left; margin:10px 0 25px 10px; font-weight:600; }
-    .form-box {
-      background:#f9f9f9; padding:20px; border-radius:12px; border:1px solid #ddd;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:20px;
+    h2 {
+      text-align: center;
+      color: #2a4d69;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
-    .form-group { display:flex; align-items:center; margin-bottom:12px; }
-    .form-group label { width:140px; font-weight:600; color:#444; }
-    .form-group label .star { color:red; }
-    .form-group input, .form-group select {
-      flex:1; padding:8px 10px; border-radius:8px; border:1px solid #ccc; font-size:14px;
+    .form-group {
+      margin-bottom: 15px;
     }
-    button {
-      width:100%; padding:12px; border:none; border-radius:8px; background:#007bff;
-      color:white; font-size:16px; cursor:pointer; transition:0.3s;
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
     }
-    button:hover { background:#0056b3; }
-    .member { border:1px solid #ddd; padding:15px; border-radius:10px; margin-top:15px; background:#f0f0f0; }
-    .removeBtn { background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:auto; margin-top:10px; }
-    .removeBtn:hover { background:#b02a37; }
-    .note { font-size:13px; color:#666; margin-top:8px; }
+    .star { color: red; }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+    #addFamilyBtn {
+      margin-top: 10px;
+      background: #2a4d69;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .removeBtn {
+      background: #c62828;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    #registerBtn {
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #langSelect {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
-      <h2>Registration for Imamat Day Celebration</h2>
-    </div>
+    <h2>Registration for Imamat Day Celebration</h2>
 
-    <!-- Language selector under the title (left-aligned) -->
-    <div class="lang-select">
-      <label for="langSelect">🌍 Language:</label>
+    <div class="form-group">
+      <label for="langSelect">Language / Sprache / زبان:</label>
       <select id="langSelect">
         <option value="en">English</option>
         <option value="de">Deutsch</option>
@@ -62,75 +92,36 @@
     </div>
 
     <form id="regForm">
-      <div class="form-box">
-        <div class="form-group">
-          <label id="lblName" for="name">Name <span class="star">*</span></label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'name' -->
-          <input type="text" id="name" name="name" required>
-        </div>
-
-        <div class="form-group">
-          <label id="lblLastname" for="lastname">Lastname <span class="star">*</span></label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'Lastname' (capital L) -->
-          <input type="text" id="lastname" name="Lastname" required>
-        </div>
-
-        <div class="form-group">
-          <label id="lblGender" for="gender">Gender <span class="star">*</span></label>
-          <!-- name 'gender' matches sheet header -->
-          <select id="gender" name="gender" required>
-            <option value="" disabled selected>Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label id="lblPhone" for="phone">Phone <span class="star">*</span></label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'Phone' (capital P) -->
-          <input type="text" id="phone" name="Phone" required>
-        </div>
-
-        <div class="form-group">
-          <label id="lblEmail" for="email">Email <span class="star">*</span></label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'Email' (capital E) -->
-          <input type="email" id="email" name="Email" required>
-        </div>
-
-        <div class="form-group">
-          <label id="lblDob" for="dob">Date of Birth <span class="star">*</span></label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'DateOfBirth' (camel case) -->
-          <input type="date" id="dob" name="DateOfBirth" required>
-        </div>
-
-        <div class="form-group">
-          <label id="lblAge" for="age">Age</label>
-          <!-- IMPORTANT: name attribute MUST match sheet header 'Age' (capital A) -->
-          <input type="text" id="age" name="Age" readonly>
-        </div>
-
+      <div class="form-group"><label id="lblName">Name <span class="star">*</span></label><input type="text" id="name" required /></div>
+      <div class="form-group"><label id="lblLastname">Lastname <span class="star">*</span></label><input type="text" id="lastname" required /></div>
+      <div class="form-group"><label id="lblGender">Gender <span class="star">*</span></label>
+        <select id="gender" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
       </div>
+      <div class="form-group"><label id="lblPhone">Phone <span class="star">*</span></label><input type="text" id="phone" required /></div>
+      <div class="form-group"><label id="lblEmail">Email <span class="star">*</span></label><input type="email" id="email" required /></div>
+      <div class="form-group"><label id="lblDob">Date of Birth <span class="star">*</span></label><input type="date" id="dob" required /></div>
+      <div class="form-group"><label id="lblAge">Age</label><input type="text" id="age" readonly /></div>
 
-      <div class="form-box">
-        <div id="familyMembers"></div>
-        <button type="button" id="addFamilyBtn">+ Add Family Member</button>
-      </div>
+      <div id="familyMembers"></div>
+      <button type="button" id="addFamilyBtn">+ Add Family Member</button>
 
+      <br><br>
       <button type="submit" id="registerBtn">Register</button>
-      <p class="note">Note: your data will be saved to the Google Sheet.</p>
     </form>
   </div>
 
   <script>
-    // TRANSLATIONS (English / German / Persian)
+    // Language translations
     const translations = {
       en: { name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register" },
       de: { name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren" },
       fa: { name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام" }
     };
 
-    // language switch
     const langSelect = document.getElementById("langSelect");
     langSelect.addEventListener("change", () => {
       const lang = langSelect.value;
@@ -147,7 +138,6 @@
       document.getElementById("registerBtn").textContent = t.register;
       document.getElementById("gender").options[0].text = t.select;
 
-      // RTL for Persian
       if (lang === "fa") {
         document.body.style.direction = "rtl";
         document.body.style.textAlign = "right";
@@ -157,7 +147,7 @@
       }
     });
 
-    // AGE auto-calculation
+    // Auto age calculation
     document.getElementById('dob').addEventListener('change', function() {
       const val = this.value;
       if (!val) { document.getElementById('age').value = ''; return; }
@@ -169,7 +159,7 @@
       document.getElementById('age').value = age >= 0 ? age : 0;
     });
 
-    // Add / Remove family members (unchanged except remove button)
+    // Add family member
     function addMember() {
       const div = document.createElement('div');
       div.className = 'member';
@@ -204,15 +194,13 @@
     }
     document.getElementById('addFamilyBtn').addEventListener('click', addMember);
 
-    // --- SAVE TO SHEETDB ---
-    // IMPORTANT: your SheetDB endpoint:
+    // Save to SheetDB
     const SHEETDB_URL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
     document.getElementById('regForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      // Build data object with keys that EXACTLY match your sheet headers
-      const payload = {
+      const mainPerson = {
         name: document.getElementById('name').value.trim(),
         Lastname: document.getElementById('lastname').value.trim(),
         gender: document.getElementById('gender').value,
@@ -222,41 +210,49 @@
         Age: document.getElementById('age').value
       };
 
-      // simple validation check (all fields mandatory except Age which auto-fills)
-      if (!payload.name || !payload.Lastname || !payload.gender || !payload.Phone || !payload.Email || !payload.DateOfBirth) {
-        alert('Please fill all mandatory fields.');
+      if (!mainPerson.name || !mainPerson.Lastname || !mainPerson.gender || !mainPerson.Phone || !mainPerson.Email || !mainPerson.DateOfBirth) {
+        alert('Please fill all required fields.');
         return;
       }
+
+      const members = [];
+      document.querySelectorAll('#familyMembers .member').forEach(div => {
+        const m = {
+          name: div.querySelector('.mname').value.trim(),
+          Lastname: div.querySelector('.mlastname').value.trim(),
+          gender: '',
+          Phone: mainPerson.Phone,
+          Email: mainPerson.Email,
+          DateOfBirth: div.querySelector('.mdob').value,
+          Age: div.querySelector('.mage').value,
+          Relation: div.querySelector('.mrelation').value
+        };
+        members.push(m);
+      });
+
+      const allData = [mainPerson, ...members];
 
       try {
         const res = await fetch(SHEETDB_URL, {
           method: 'POST',
-          mode: 'cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: [ payload ] })
+          body: JSON.stringify({ data: allData })
         });
-
-        // log status & body for debugging
-        let bodyText;
-        try { bodyText = await res.text(); } catch (err) { bodyText = '(no response body)'; }
-        console.log('SheetDB status:', res.status, 'ok:', res.ok);
-        console.log('SheetDB response body:', bodyText);
+        const txt = await res.text();
+        console.log('SheetDB response:', txt);
 
         if (res.ok) {
-          alert('✅ Registration successful! Your data was saved.');
-          // reset form but keep language selection
+          alert('✅ Registration successful! All data saved.');
           const lang = langSelect.value;
           document.getElementById('regForm').reset();
-          langSelect.value = lang; // restore selected language
-          // re-run language update so labels remain in current language
+          langSelect.value = lang;
           langSelect.dispatchEvent(new Event('change'));
         } else {
-          // show the response body (often contains error message)
-          alert('❌ Failed to save. Check console for details.');
+          alert('❌ Failed to save family members. Check console.');
         }
       } catch (err) {
-        console.error('Fetch error saving to SheetDB:', err);
-        alert('⚠️ Connection error. Could not save data. See console for details.');
+        console.error('Error saving to SheetDB:', err);
+        alert('⚠️ Network error while saving data.');
       }
     });
   </script>
