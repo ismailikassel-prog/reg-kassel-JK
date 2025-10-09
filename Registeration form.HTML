@@ -152,6 +152,32 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
+    const translations = {
+      en: { name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register" },
+      de: { name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren" },
+      fa: { name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام" }
+    };
+
+    document.getElementById("langSelect").addEventListener("change", () => {
+      const lang = document.getElementById("langSelect").value;
+      const t = translations[lang];
+      if (!t) return;
+
+      document.getElementById("lblName").innerHTML = t.name + ' <span class="star">*</span>';
+      document.getElementById("lblLastname").innerHTML = t.lastname + ' <span class="star">*</span>';
+      document.getElementById("lblGender").innerHTML = t.gender + ' <span class="star">*</span>';
+      document.getElementById("lblPhone").innerHTML = t.phone + ' <span class="star">*</span>';
+      document.getElementById("lblEmail").innerHTML = t.email + ' <span class="star">*</span>';
+      document.getElementById("lblDob").innerHTML = t.dob + ' <span class="star">*</span>';
+      document.getElementById("lblAge").textContent = t.age;
+      document.getElementById("addFamilyBtn").textContent = t.addMember;
+      document.getElementById("registerBtn").textContent = t.register;
+      document.getElementById("gender").options[0].text = t.select;
+
+      document.body.style.direction = lang === "fa" ? "rtl" : "ltr";
+      document.body.style.textAlign = lang === "fa" ? "right" : "left";
+    });
+
     // 🧮 Age Calculation
     document.getElementById('dob').addEventListener('change', function() {
       const dob = new Date(this.value);
@@ -170,18 +196,20 @@
         <div class="form-group">
           <label>Gender <span class="star">*</span></label>
           <select class="mgender" required>
-            <option value="" disabled selected>Select</option>
+            <option value="">Select</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-            <option value="Other">Other</option>
           </select>
         </div>
         <div class="form-group">
           <label>Relation <span class="star">*</span></label>
           <select class="mrelation" required>
-            <option value="Spouse">Spouse</option>
-            <option value="Child">Child</option>
-            <option value="Parent">Parent</option>
+            <option value="Husband">Husband</option>
+            <option value="Wife">Wife</option>
+            <option value="Son">Son</option>
+            <option value="Daughter">Daughter</option>
+            <option value="Father">Father</option>
+            <option value="Mother">Mother</option>
             <option value="Brother">Brother</option>
             <option value="Sister">Sister</option>
             <option value="Other">Other</option>
@@ -199,14 +227,12 @@
         div.querySelector(".mage").value = diff;
       });
     }
-
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
     // 📤 Submit & Save Data
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      // 👤 Main user data (Family Admin)
       const mainData = {
         name: document.getElementById("name").value,
         Lastname: document.getElementById("lastname").value,
