@@ -34,18 +34,18 @@
     .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; }
     .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
     .removeBtn:hover { background:#b02a37; }
-    small.hint { display:block; margin-bottom:12px; font-weight:600; font-size:16px; }
   </style>
 </head>
 <body>
+
+  <!-- TOP MESSAGE BANNER -->
+  <div id="topMessage" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:9999; padding:12px 20px; border-radius:8px; display:none; font-weight:600; font-size:16px; box-shadow:0 4px 10px rgba(0,0,0,0.2);"></div>
+
   <div class="container">
     <div class="header">
       <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
       <h2 id="formTitle">Registration for Imamat Day Celebration</h2>
     </div>
-
-    <!-- MESSAGE DISPLAY ON TOP -->
-    <small class="hint" id="hintText"></small>
 
     <div class="lang-select">
       <label for="langSelect">Language:</label>
@@ -149,6 +149,15 @@
       }catch(err){ console.error("Duplicate check error:", err); throw err; }
     }
 
+    function showTopMessage(msg, type="success"){
+      const banner = document.getElementById("topMessage");
+      banner.textContent = msg;
+      banner.style.backgroundColor = type === "success" ? "#28a745" : "#dc3545";
+      banner.style.color = "#fff";
+      banner.style.display = "block";
+      setTimeout(()=>{ banner.style.display = "none"; }, 4000);
+    }
+
     document.getElementById("regForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const lang = langSelect.value;
@@ -158,10 +167,6 @@
       registerBtn.disabled = true;
       registerBtn.textContent = tr.register + " ...";
 
-      const hint = document.getElementById("hintText");
-      hint.textContent = "";
-      hint.style.color = "#dc3545";
-
       try{
         const name = document.getElementById("name").value.trim();
         const lastname = document.getElementById("lastname").value.trim();
@@ -170,9 +175,9 @@
 
         let isDup = false;
         try{ isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob); }
-        catch(err){ hint.textContent = tr.messages.savingError; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+        catch(err){ showTopMessage(tr.messages.savingError, "error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
-        if(isDup){ hint.textContent = tr.messages.duplicate; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+        if(isDup){ showTopMessage(tr.messages.duplicate, "error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
         const mainData = {
           Name: name,
@@ -203,21 +208,19 @@
           await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[memberData]})});
         }
 
-        hint.style.color = "#28a745";
-        hint.textContent = tr.messages.saved;
+        showTopMessage(tr.messages.saved,"success");
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
       }catch(err){
         console.error("Submit error:",err);
-        hint.textContent = "Error saving registration. Please try again.";
+        showTopMessage("Error saving registration. Please try again.","error");
       }finally{
         registerBtn.disabled = false;
         registerBtn.textContent = tr.register;
       }
     });
 
-    // Language selection logic
     const langSelect = document.getElementById("langSelect");
     function applyLanguage(lang){
       const tr = translations[lang] || translations.en;
@@ -232,14 +235,12 @@
       document.getElementById("lblAge").textContent = tr.age;
       document.getElementById("addFamilyBtn").textContent = tr.addMember;
       document.getElementById("registerBtn").textContent = tr.register;
-      document.getElementById("hintText").textContent = "";
       document.body.style.direction = (lang==='fa')?'rtl':'ltr';
       document.body.style.textAlign = (lang==='fa')?'right':'left';
     }
     applyLanguage(langSelect.value);
     langSelect.addEventListener("change",()=>applyLanguage(langSelect.value));
 
-    // Family member addition logic
     function addMember(){
       const lang = langSelect.value;
       const tr = translations[lang] || translations.en;
@@ -264,11 +265,9 @@
       document.getElementById("familyMembers").appendChild(div);
 
       div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
-      div.querySelector(".mdob").addEventListener("change",function(){
-        div.querySelector(".mage").value = calculateAgeExact(this.value);
-      });
+      div.querySelector(".mdob").addEventListener("change",function(){ div.querySelector(".mage").value = calculateAgeExact(this.value); });
     }
-    document.getElementById("addFamilyBtn").addEventListener("click",addMember);
+    document.getElementById("addFamilyBtn").addEventListener("click", addMember);
   </script>
 </body>
 </html>
