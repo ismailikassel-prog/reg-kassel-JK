@@ -158,6 +158,7 @@
       fa: { name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام" }
     };
 
+    // 🌍 Language Change
     document.getElementById("langSelect").addEventListener("change", () => {
       const lang = document.getElementById("langSelect").value;
       const t = translations[lang];
@@ -178,15 +179,30 @@
       document.body.style.textAlign = lang === "fa" ? "right" : "left";
     });
 
-    // 🧮 Age Calculation
+    // 📅 Format Date to DD-MMM-YYYY
+    function formatDate(d) {
+      if (!(d instanceof Date) || isNaN(d)) return "";
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      return `${String(d.getDate()).padStart(2,'0')}-${months[d.getMonth()]}-${d.getFullYear()}`;
+    }
+
+    // 🧮 Accurate Age Calculation
+    function calculateAge(dob) {
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      return age < 0 ? 0 : age;
+    }
+
     document.getElementById('dob').addEventListener('change', function() {
       const dob = new Date(this.value);
-      if (!dob) return;
-      const diff = new Date().getFullYear() - dob.getFullYear();
-      document.getElementById('age').value = diff;
+      document.getElementById('age').value = calculateAge(dob);
     });
 
-    // 👨‍👩‍👧 Add Family Member
+    // ➕ Add Family Member
     function addMember() {
       const div = document.createElement("div");
       div.classList.add("member");
@@ -223,16 +239,16 @@
       div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
       div.querySelector(".mdob").addEventListener("change", function() {
         const dob = new Date(this.value);
-        const diff = new Date().getFullYear() - dob.getFullYear();
-        div.querySelector(".mage").value = diff;
+        div.querySelector(".mage").value = calculateAge(dob);
       });
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // 📤 Submit & Save Data
+    // 📤 Submit Data
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
+      const dobMain = new Date(document.getElementById("dob").value);
       const mainData = {
         name: document.getElementById("name").value,
         Lastname: document.getElementById("lastname").value,
@@ -240,20 +256,19 @@
         Phone: document.getElementById("phone").value,
         Email: document.getElementById("email").value,
         Relation: "Family Admin",
-        DateOfBirth: document.getElementById("dob").value,
-        Age: document.getElementById("age").value
+        DateOfBirth: formatDate(dobMain),
+        Age: calculateAge(dobMain)
       };
 
-      // send main form
       await fetch(sheetURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: [mainData] })
       });
 
-      // send each family member
       const members = document.querySelectorAll(".member");
       for (const m of members) {
+        const mdob = new Date(m.querySelector(".mdob").value);
         const memberData = {
           name: m.querySelector(".mname").value,
           Lastname: m.querySelector(".mlastname").value,
@@ -261,8 +276,8 @@
           Phone: "",
           Email: "",
           Relation: m.querySelector(".mrelation").value,
-          DateOfBirth: m.querySelector(".mdob").value,
-          Age: m.querySelector(".mage").value
+          DateOfBirth: formatDate(mdob),
+          Age: calculateAge(mdob)
         };
         await fetch(sheetURL, {
           method: "POST",
@@ -278,4 +293,3 @@
   </script>
 </body>
 </html>
-
