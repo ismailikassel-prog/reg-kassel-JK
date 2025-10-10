@@ -34,12 +34,28 @@
     .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; }
     .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
     .removeBtn:hover { background:#b02a37; }
+
+    /* Toast message style */
+    #toastMessage {
+      position: fixed;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 15px 25px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: top 0.5s ease;
+    }
   </style>
 </head>
 <body>
 
-  <!-- TOP MESSAGE BANNER -->
-  <div id="topMessage" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:9999; padding:12px 20px; border-radius:8px; display:none; font-weight:600; font-size:16px; box-shadow:0 4px 10px rgba(0,0,0,0.2);"></div>
+  <!-- Toast Notification -->
+  <div id="toastMessage"></div>
 
   <div class="container">
     <div class="header">
@@ -149,13 +165,15 @@
       }catch(err){ console.error("Duplicate check error:", err); throw err; }
     }
 
-    function showTopMessage(msg, type="success"){
-      const banner = document.getElementById("topMessage");
-      banner.textContent = msg;
-      banner.style.backgroundColor = type === "success" ? "#28a745" : "#dc3545";
-      banner.style.color = "#fff";
-      banner.style.display = "block";
-      setTimeout(()=>{ banner.style.display = "none"; }, 4000);
+    function showToastMessage(msg, type="success"){
+      const toast = document.getElementById("toastMessage");
+      toast.textContent = msg;
+      toast.style.backgroundColor = type === "success" ? "#28a745" : "#dc3545";
+      toast.style.top = "20px";
+      toast.style.display = "block";
+      setTimeout(()=>{
+        toast.style.top = "-80px";
+      }, 3500);
     }
 
     document.getElementById("regForm").addEventListener("submit", async function(e){
@@ -175,50 +193,27 @@
 
         let isDup = false;
         try{ isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob); }
-        catch(err){ showTopMessage(tr.messages.savingError, "error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+        catch(err){ showToastMessage(tr.messages.savingError,"error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
-        if(isDup){ showTopMessage(tr.messages.duplicate, "error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+        if(isDup){ showToastMessage(tr.messages.duplicate,"error"); registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
-        const mainData = {
-          Name: name,
-          Lastname: lastname,
-          gender: document.getElementById("gender").value,
-          Phone: document.getElementById("phone").value.trim(),
-          Email: document.getElementById("email").value.trim(),
-          Relation: "Family Admin",
-          DateOfBirth: formattedDob,
-          Age: calculateAgeExact(dobRaw)
-        };
+        const mainData = { Name: name, Lastname: lastname, gender: document.getElementById("gender").value, Phone: document.getElementById("phone").value.trim(), Email: document.getElementById("email").value.trim(), Relation: "Family Admin", DateOfBirth: formattedDob, Age: calculateAgeExact(dobRaw) };
 
         await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[mainData]})});
 
         const members = document.querySelectorAll(".member");
         for(const m of members){
           const mdobRaw = m.querySelector(".mdob").value;
-          const memberData = {
-            Name: m.querySelector(".mname").value.trim(),
-            Lastname: m.querySelector(".mlastname").value.trim(),
-            gender: m.querySelector(".mgender").value,
-            Phone:"",
-            Email:"",
-            Relation:"",
-            DateOfBirth: formatToDDMMMYYYY(mdobRaw),
-            Age: calculateAgeExact(mdobRaw)
-          };
+          const memberData = { Name: m.querySelector(".mname").value.trim(), Lastname: m.querySelector(".mlastname").value.trim(), gender: m.querySelector(".mgender").value, Phone:"", Email:"", Relation:"", DateOfBirth: formatToDDMMMYYYY(mdobRaw), Age: calculateAgeExact(mdobRaw) };
           await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[memberData]})});
         }
 
-        showTopMessage(tr.messages.saved,"success");
+        showToastMessage(tr.messages.saved,"success");
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
-      }catch(err){
-        console.error("Submit error:",err);
-        showTopMessage("Error saving registration. Please try again.","error");
-      }finally{
-        registerBtn.disabled = false;
-        registerBtn.textContent = tr.register;
-      }
+      }catch(err){ console.error(err); showToastMessage("Error saving registration. Please try again.","error"); }
+      finally{ registerBtn.disabled = false; registerBtn.textContent = tr.register; }
     });
 
     const langSelect = document.getElementById("langSelect");
@@ -268,6 +263,7 @@
       div.querySelector(".mdob").addEventListener("change",function(){ div.querySelector(".mage").value = calculateAgeExact(this.value); });
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
+
   </script>
 </body>
 </html>
