@@ -111,10 +111,8 @@
   </div>
 
   <script>
-    // ---------- CONFIG ----------
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // ---------- TRANSLATIONS ----------
     const translations = {
       en: {
         title: "Registration for Imamat Day Celebration",
@@ -154,7 +152,6 @@
       }
     };
 
-    // ---------- UTIL: date format and age ----------
     function formatToDDMMMYYYY(dateInput) {
       if (!dateInput) return "";
       const d = new Date(dateInput);
@@ -177,7 +174,6 @@
       return age < 1 ? 0 : age;
     }
 
-    // ---------- LANGUAGE / UI ----------
     const langSelect = document.getElementById("langSelect");
     function applyLanguage(lang) {
       const tr = translations[lang] || translations.en;
@@ -216,16 +212,13 @@
     applyLanguage(langSelect.value);
     langSelect.addEventListener("change", () => applyLanguage(langSelect.value));
 
-    // ---------- AGE calculation ----------
     document.getElementById("dob").addEventListener("change", function(){
       document.getElementById("age").value = calculateAgeExact(this.value);
     });
 
-    // ---------- Add family member ----------
     function addMember() {
       const lang = langSelect.value;
       const tr = translations[lang] || translations.en;
-
       const div = document.createElement("div");
       div.classList.add("member");
       div.innerHTML = `
@@ -244,7 +237,6 @@
         <div style="text-align:${(lang==='fa')?'right':'left'};"><button type="button" class="removeBtn">${tr.remove}</button></div>
       `;
       document.getElementById("familyMembers").appendChild(div);
-
       div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
       div.querySelector(".mdob").addEventListener("change", function() {
         div.querySelector(".mage").value = calculateAgeExact(this.value);
@@ -252,12 +244,27 @@
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // ---------- FORM SUBMIT WITH DUPLICATE CHECK ----------
+    // ----------- DUPLICATE CHECK -----------
+    async function isDuplicate(name, lastname, formattedDob) {
+      try {
+        const res = await fetch(sheetURL);
+        if (!res.ok) throw new Error("Failed to fetch data");
+        const data = await res.json();
+        return data.some(row =>
+          row.Name?.trim().toLowerCase() === name.toLowerCase() &&
+          row.Lastname?.trim().toLowerCase() === lastname.toLowerCase() &&
+          row.DateOfBirth?.trim() === formattedDob
+        );
+      } catch (err) {
+        console.error("Duplicate check error:", err);
+        throw err;
+      }
+    }
+
     document.getElementById("regForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const lang = langSelect.value;
       const tr = translations[lang] || translations.en;
-
       const registerBtn = document.getElementById("registerBtn");
       registerBtn.disabled = true;
       registerBtn.textContent = tr.register + " ...";
@@ -268,14 +275,9 @@
         const dobRaw = document.getElementById("dob").value;
         const formattedDob = formatToDDMMMYYYY(dobRaw);
 
-        // ----- DUPLICATE CHECK -----
-        const url = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(formattedDob)}`;
-        let isDup = false;
+        let dup = false;
         try {
-          const res = await fetch(url);
-          if (!res.ok) throw new Error("search failed");
-          const data = await res.json();
-          isDup = Array.isArray(data) && data.length > 0;
+          dup = await isDuplicate(name, lastname, formattedDob);
         } catch (err) {
           alert(tr.messages.savingError);
           registerBtn.disabled = false;
@@ -283,16 +285,16 @@
           return;
         }
 
-        if (isDup) {
-          alert(tr.messages.duplicate);  // ⚠️ Already registered
+        if (dup) {
+          alert(tr.messages.duplicate);
           registerBtn.disabled = false;
           registerBtn.textContent = tr.register;
-          return; // stop saving
+          return;
         }
 
-        // ----- SAVE MAIN RECORD -----
+        // save main record
         const mainData = {
-          name,
+          Name: name,
           Lastname: lastname,
           gender: document.getElementById("gender").value,
           Phone: document.getElementById("phone").value.trim(),
@@ -308,17 +310,16 @@
           body: JSON.stringify({ data: [ mainData ] })
         });
 
-        // ----- SAVE FAMILY MEMBERS -----
         const members = document.querySelectorAll(".member");
         for (const m of members) {
           const mdobRaw = m.querySelector(".mdob").value;
           const memberData = {
-            name: m.querySelector(".mname").value.trim(),
+            Name: m.querySelector(".mname").value.trim(),
             Lastname: m.querySelector(".mlastname").value.trim(),
             gender: m.querySelector(".mgender").value,
             Phone: "",
             Email: "",
-            Relation: "",
+            Relation: m.querySelector(".mrelation") ? m.querySelector(".mrelation").value : "",
             DateOfBirth: formatToDDMMMYYYY(mdobRaw),
             Age: calculateAgeExact(mdobRaw)
           };
@@ -333,13 +334,12 @@
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
-
       } catch (err) {
         console.error("Submit error:", err);
         alert("Error saving registration. Please try again.");
       } finally {
         registerBtn.disabled = false;
-        registerBtn.textContent = tr.register;
+        registerBtn.textContent = translations[lang].register;
       }
     });
   </script>
