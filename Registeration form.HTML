@@ -9,6 +9,8 @@
       margin: 0;
       padding: 0;
       background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;
+      direction: ltr;
+      text-align: left;
     }
     .container {
       max-width: 650px;
@@ -36,13 +38,6 @@
       text-align: left;
       margin: 10px 0 25px 10px;
       font-weight: 600;
-    }
-    .lang-select label {
-      margin-right: 5px;
-    }
-    .lang-select::before {
-      content: "🌍";
-      margin-right: 5px;
     }
     .form-box {
       background: #f9f9f9;
@@ -109,7 +104,7 @@
   <div class="container">
     <div class="header">
       <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
-      <h2>Registration for Imamat Day Celebration</h2>
+      <h2 id="formTitle">Registration for Imamat Day Celebration</h2>
     </div>
 
     <div class="lang-select">
@@ -152,7 +147,32 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // 🧮 Format date and calculate accurate age (<1 year = 0)
+    // 🌍 Translations
+    const t = {
+      en: { title:"Registration for Imamat Day Celebration", name:"Name", lastname:"Lastname", gender:"Gender", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", add:"+ Add Family Member", register:"Register" },
+      de: { title:"Anmeldung zur Imamat-Tag Feier", name:"Vorname", lastname:"Nachname", gender:"Geschlecht", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", add:"+ Familienmitglied hinzufügen", register:"Registrieren" },
+      fa: { title:"ثبت نام برای جشن روز امامت", name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", add:"+ افزودن عضو خانواده", register:"ثبت نام" }
+    };
+
+    const langSelect = document.getElementById('langSelect');
+    langSelect.addEventListener('change', () => {
+      const lang = langSelect.value;
+      const tr = t[lang];
+      document.getElementById('formTitle').textContent = tr.title;
+      document.getElementById('lblName').innerHTML = `${tr.name} <span class="star">*</span>`;
+      document.getElementById('lblLastname').innerHTML = `${tr.lastname} <span class="star">*</span>`;
+      document.getElementById('lblGender').innerHTML = `${tr.gender} <span class="star">*</span>`;
+      document.getElementById('lblPhone').innerHTML = `${tr.phone} <span class="star">*</span>`;
+      document.getElementById('lblEmail').innerHTML = `${tr.email} <span class="star">*</span>`;
+      document.getElementById('lblDob').innerHTML = `${tr.dob} <span class="star">*</span>`;
+      document.getElementById('lblAge').textContent = tr.age;
+      document.getElementById('addFamilyBtn').textContent = tr.add;
+      document.getElementById('registerBtn').textContent = tr.register;
+      document.body.style.direction = lang === 'fa' ? 'rtl' : 'ltr';
+      document.body.style.textAlign = lang === 'fa' ? 'right' : 'left';
+    });
+
+    // 🧮 Format date & calculate accurate age (<1 year = 0)
     function formatDate(date) {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
@@ -214,7 +234,6 @@
     // 📤 Submit & Save Data
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-
       const name = document.getElementById("name").value.trim();
       const lastname = document.getElementById("lastname").value.trim();
       const phone = document.getElementById("phone").value.trim();
@@ -223,11 +242,10 @@
       const formattedDob = formatDate(dob);
       const age = calculateAge(dob);
 
-      // 🕵️‍♂️ Duplicate check
+      // Duplicate check
       const query = `${sheetURL}/search?name=${name}&Lastname=${lastname}&Phone=${phone}&Email=${email}&DateOfBirth=${formattedDob}`;
       const response = await fetch(query);
       const existing = await response.json();
-
       if (existing.length > 0) {
         alert("⚠️ You have already registered with these details!");
         return;
@@ -235,11 +253,7 @@
 
       const mainData = { name, Lastname: lastname, gender: document.getElementById("gender").value, Phone: phone, Email: email, Relation: "Family Admin", DateOfBirth: formattedDob, Age: age };
 
-      await fetch(sheetURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: [mainData] })
-      });
+      await fetch(sheetURL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ data: [mainData] }) });
 
       // Save Family Members
       const members = document.querySelectorAll(".member");
@@ -255,11 +269,7 @@
           DateOfBirth: formatDate(mdob),
           Age: calculateAge(mdob)
         };
-        await fetch(sheetURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [mData] })
-        });
+        await fetch(sheetURL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ data: [mData] }) });
       }
 
       alert("✅ Registration submitted successfully!");
