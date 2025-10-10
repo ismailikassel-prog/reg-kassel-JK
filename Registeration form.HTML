@@ -31,8 +31,8 @@
     .star { color:red; margin-left:4px; }
     button { width:100%; padding:12px; border:none; border-radius:8px; background:#007bff; color:#fff; font-size:16px; cursor:pointer; }
     button:hover { background:#0056b3; }
-    .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; }
-    .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
+    .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; position:relative; }
+    .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; position:absolute; top:10px; right:10px; }
     .removeBtn:hover { background:#b02a37; }
 
     /* Toast message style */
@@ -68,8 +68,6 @@
       <label for="langSelect">Language:</label>
       <select id="langSelect" aria-label="Language select">
         <option value="en">English</option>
-        <option value="de">Deutsch</option>
-        <option value="fa">فارسی</option>
       </select>
     </div>
 
@@ -126,17 +124,6 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    const translations = {
-      en: { 
-        title:"Registration for Imamat Day Celebration", 
-        name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register", remove:"Remove", 
-        messages:{
-          duplicate: "STOP: You Have Already Registered",
-          saved:"✅ Registration submitted successfully!"
-        }
-      }
-    };
-
     function formatToDDMMMYYYY(dateInput){
       if(!dateInput) return "";
       const d = new Date(dateInput);
@@ -182,12 +169,55 @@
       }
     }
 
+    // ---------- Add Family Member ----------
+    const familyMembersDiv = document.getElementById("familyMembers");
+    document.getElementById("addFamilyBtn").addEventListener("click", ()=>{
+      const div = document.createElement("div");
+      div.className="member";
+      div.innerHTML=`
+        <button type="button" class="removeBtn">Remove</button>
+        <div class="form-group">
+          <label>Name <span class="star">*</span></label>
+          <input type="text" class="mname" required />
+        </div>
+        <div class="form-group">
+          <label>Lastname <span class="star">*</span></label>
+          <input type="text" class="mlastname" required />
+        </div>
+        <div class="form-group">
+          <label>Gender <span class="star">*</span></label>
+          <select class="mgender" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Relation <span class="star">*</span></label>
+          <select class="mrelation" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Spouse">Spouse</option>
+            <option value="Child">Child</option>
+            <option value="Parent">Parent</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth <span class="star">*</span></label>
+          <input type="date" class="mdob" required />
+        </div>
+      `;
+      div.querySelector(".removeBtn").addEventListener("click", ()=>div.remove());
+      familyMembersDiv.appendChild(div);
+    });
+
+    // ---------- Form Submit ----------
     document.getElementById("regForm").addEventListener("submit", async function(e){
       e.preventDefault();
-      const tr = translations["en"];
       const registerBtn = document.getElementById("registerBtn");
       registerBtn.disabled = true;
-      registerBtn.textContent = tr.register + " ...";
+      registerBtn.textContent = "Registering ...";
 
       const name = document.getElementById("name").value.trim();
       const lastname = document.getElementById("lastname").value.trim();
@@ -196,9 +226,9 @@
 
       const isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob);
       if(isDup){
-        showToastMessage(tr.messages.duplicate,"error");
+        showToastMessage("STOP: You Have Already Registered","error");
         registerBtn.disabled=false;
-        registerBtn.textContent=tr.register;
+        registerBtn.textContent="Register";
         return;
       }
 
@@ -216,7 +246,6 @@
 
         await fetch(sheetURL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({data:[mainData]}) });
 
-        // Save family members
         const members = document.querySelectorAll(".member");
         for(const m of members){
           const mdobRaw = m.querySelector(".mdob").value;
@@ -224,14 +253,15 @@
             Name:m.querySelector(".mname").value.trim(),
             Lastname:m.querySelector(".mlastname").value.trim(),
             gender:m.querySelector(".mgender").value,
-            Phone:"", Email:"", Relation:"",
+            Relation:m.querySelector(".mrelation").value,
+            Phone:"", Email:"",
             DateOfBirth:formatToDDMMMYYYY(mdobRaw),
             Age:calculateAgeExact(mdobRaw)
           };
           await fetch(sheetURL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({data:[memberData]})});
         }
 
-        showToastMessage(tr.messages.saved,"success");
+        showToastMessage("✅ Registration submitted successfully!","success");
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML="";
         document.getElementById("age").value="";
@@ -240,10 +270,9 @@
         showToastMessage("Error saving registration!","error");
       } finally{
         registerBtn.disabled=false;
-        registerBtn.textContent=tr.register;
+        registerBtn.textContent="Register";
       }
     });
   </script>
 </body>
 </html>
-
