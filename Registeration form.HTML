@@ -37,6 +37,13 @@
       margin: 10px 0 25px 10px;
       font-weight: 600;
     }
+    .lang-select label {
+      margin-right: 5px;
+    }
+    .lang-select::before {
+      content: "🌍";
+      margin-right: 5px;
+    }
     .form-box {
       background: #f9f9f9;
       padding: 20px;
@@ -54,6 +61,9 @@
       width: 140px;
       font-weight: 600;
       color: #444;
+    }
+    .form-group label .star {
+      color: red;
     }
     .form-group input,
     .form-group select {
@@ -102,21 +112,32 @@
       <h2>Registration for Imamat Day Celebration</h2>
     </div>
 
+    <div class="lang-select">
+      <label for="langSelect">Language:</label>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="fa">فارسی</option>
+      </select>
+    </div>
+
     <form id="regForm">
       <div class="form-box">
-        <div class="form-group"><label>Name *</label><input type="text" id="name" required></div>
-        <div class="form-group"><label>Lastname *</label><input type="text" id="lastname" required></div>
-        <div class="form-group"><label>Gender *</label>
+        <div class="form-group"><label id="lblName">Name <span class="star">*</span></label><input type="text" id="name" required></div>
+        <div class="form-group"><label id="lblLastname">Lastname <span class="star">*</span></label><input type="text" id="lastname" required></div>
+        <div class="form-group">
+          <label id="lblGender">Gender <span class="star">*</span></label>
           <select id="gender" required>
-            <option value="">Select</option>
+            <option value="" disabled selected>Select</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div class="form-group"><label>Phone *</label><input type="text" id="phone" required></div>
-        <div class="form-group"><label>Email *</label><input type="email" id="email" required></div>
-        <div class="form-group"><label>Date of Birth *</label><input type="date" id="dob" required></div>
-        <div class="form-group"><label>Age</label><input type="text" id="age" readonly></div>
+        <div class="form-group"><label id="lblPhone">Phone <span class="star">*</span></label><input type="text" id="phone" required></div>
+        <div class="form-group"><label id="lblEmail">Email <span class="star">*</span></label><input type="email" id="email" required></div>
+        <div class="form-group"><label id="lblDob">Date of Birth <span class="star">*</span></label><input type="date" id="dob" required></div>
+        <div class="form-group"><label id="lblAge">Age</label><input type="text" id="age" readonly></div>
       </div>
 
       <div class="form-box">
@@ -124,53 +145,49 @@
         <button type="button" id="addFamilyBtn">+ Add Family Member</button>
       </div>
 
-      <button type="submit">Register</button>
+      <button type="submit" id="registerBtn">Register</button>
     </form>
   </div>
 
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // 🧮 Accurate Age Calculation
-    function calculateAge(dob) {
-      const today = new Date();
-      if (!(dob instanceof Date) || isNaN(dob)) return "";
-      let age = today.getFullYear() - dob.getFullYear();
-      const thisYearBirthday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-      if (today < thisYearBirthday) age--;
-      return age < 0 ? 0 : age;
-    }
-
-    // 📅 Format date as DD-MMM-YYYY
-    function formatDate(dateStr) {
-      if (!dateStr) return "";
-      const date = new Date(dateStr);
-      if (isNaN(date)) return dateStr;
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = date.toLocaleString("en", { month: "short" });
-      const year = date.getFullYear();
+    // 🧮 Format date and calculate accurate age (<1 year = 0)
+    function formatDate(date) {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = d.toLocaleString('en-US', { month: 'short' });
+      const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     }
 
+    function calculateAge(dob) {
+      const birth = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+      return age < 1 ? 0 : age;
+    }
+
     document.getElementById('dob').addEventListener('change', function() {
-      const dob = new Date(this.value);
-      document.getElementById('age').value = calculateAge(dob);
+      document.getElementById('age').value = calculateAge(this.value);
     });
 
+    // 👨‍👩‍👧 Add Family Member
     function addMember() {
       const div = document.createElement("div");
       div.classList.add("member");
       div.innerHTML = `
-        <div class="form-group"><label>Name *</label><input type="text" class="mname" required></div>
-        <div class="form-group"><label>Lastname *</label><input type="text" class="mlastname" required></div>
-        <div class="form-group"><label>Gender *</label>
+        <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" class="mname" required></div>
+        <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group"><label>Gender <span class="star">*</span></label>
           <select class="mgender" required>
             <option value="">Select</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Relation *</label>
+          </select></div>
+        <div class="form-group"><label>Relation <span class="star">*</span></label>
           <select class="mrelation" required>
             <option value="Husband">Husband</option>
             <option value="Wife">Wife</option>
@@ -181,36 +198,42 @@
             <option value="Brother">Brother</option>
             <option value="Sister">Sister</option>
             <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Date of Birth *</label><input type="date" class="mdob" required></div>
+          </select></div>
+        <div class="form-group"><label>Date of Birth <span class="star">*</span></label><input type="date" class="mdob" required></div>
         <div class="form-group"><label>Age</label><input type="text" class="mage" readonly></div>
         <button type="button" class="removeBtn">Remove</button>
       `;
       document.getElementById("familyMembers").appendChild(div);
       div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
       div.querySelector(".mdob").addEventListener("change", function() {
-        const dob = new Date(this.value);
-        div.querySelector(".mage").value = calculateAge(dob);
+        div.querySelector(".mage").value = calculateAge(this.value);
       });
     }
-
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // 📤 Submit data
+    // 📤 Submit & Save Data
     document.getElementById("regForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const mainData = {
-        name: document.getElementById("name").value,
-        Lastname: document.getElementById("lastname").value,
-        gender: document.getElementById("gender").value,
-        Phone: document.getElementById("phone").value,
-        Email: document.getElementById("email").value,
-        Relation: "Family Admin",
-        DateOfBirth: formatDate(document.getElementById("dob").value),
-        Age: document.getElementById("age").value
-      };
+      const name = document.getElementById("name").value.trim();
+      const lastname = document.getElementById("lastname").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const dob = document.getElementById("dob").value;
+      const formattedDob = formatDate(dob);
+      const age = calculateAge(dob);
+
+      // 🕵️‍♂️ Duplicate check
+      const query = `${sheetURL}/search?name=${name}&Lastname=${lastname}&Phone=${phone}&Email=${email}&DateOfBirth=${formattedDob}`;
+      const response = await fetch(query);
+      const existing = await response.json();
+
+      if (existing.length > 0) {
+        alert("⚠️ You have already registered with these details!");
+        return;
+      }
+
+      const mainData = { name, Lastname: lastname, gender: document.getElementById("gender").value, Phone: phone, Email: email, Relation: "Family Admin", DateOfBirth: formattedDob, Age: age };
 
       await fetch(sheetURL, {
         method: "POST",
@@ -218,22 +241,24 @@
         body: JSON.stringify({ data: [mainData] })
       });
 
+      // Save Family Members
       const members = document.querySelectorAll(".member");
       for (const m of members) {
-        const memberData = {
+        const mdob = m.querySelector(".mdob").value;
+        const mData = {
           name: m.querySelector(".mname").value,
           Lastname: m.querySelector(".mlastname").value,
           gender: m.querySelector(".mgender").value,
           Phone: "",
           Email: "",
           Relation: m.querySelector(".mrelation").value,
-          DateOfBirth: formatDate(m.querySelector(".mdob").value),
-          Age: m.querySelector(".mage").value
+          DateOfBirth: formatDate(mdob),
+          Age: calculateAge(mdob)
         };
         await fetch(sheetURL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [memberData] })
+          body: JSON.stringify({ data: [mData] })
         });
       }
 
