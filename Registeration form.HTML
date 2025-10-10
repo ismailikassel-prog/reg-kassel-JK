@@ -371,7 +371,7 @@
         document.getElementById("age").value = "";
       } catch (err) {
         console.error("Submit error:", err);
-        document.getElementById("popupText").textContent = "Error saving registration. Please try again.";
+        document.getElementById("popupText").textContent = "Error saving registration. you have already Registered.";
         document.getElementById("popupMsg").style.display = "flex";
       } finally {
         registerBtn.disabled = false;
@@ -381,3 +381,4 @@
   </script>
 </body>
 </html>
+
