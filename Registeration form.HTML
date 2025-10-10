@@ -170,12 +170,11 @@
       const dob = new Date(dateInput);
       if (isNaN(dob)) return "";
       const today = new Date();
-      // compute this year's birthday
       const thisYearBirthday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
       let age = today.getFullYear() - dob.getFullYear();
       if (today < thisYearBirthday) age--;
       if (age < 0) age = 0;
-      return age < 1 ? 0 : age; // babies under 1 -> 0
+      return age < 1 ? 0 : age;
     }
 
     // ---------- LANGUAGE / UI ----------
@@ -186,7 +185,6 @@
       document.getElementById("lblName").innerHTML = `${tr.name} <span class="star">*</span>`;
       document.getElementById("lblLastname").innerHTML = `${tr.lastname} <span class="star">*</span>`;
       document.getElementById("lblGender").innerHTML = `${tr.gender} <span class="star">*</span>`;
-      // gender select first option
       const genderSelect = document.getElementById("gender");
       genderSelect.options[0].text = tr.select;
       document.getElementById("lblPhone").innerHTML = `${tr.phone} <span class="star">*</span>`;
@@ -196,47 +194,40 @@
       document.getElementById("addFamilyBtn").textContent = tr.addMember;
       document.getElementById("registerBtn").textContent = tr.register;
       document.getElementById("hintText").textContent = "";
-      // direction
       document.body.style.direction = (lang === "fa") ? "rtl" : "ltr";
       document.body.style.textAlign = (lang === "fa") ? "right" : "left";
 
-      // update existing dynamic member labels
       document.querySelectorAll(".member").forEach(member => {
-        // find labels inside this member and update by order we used when creating
         const labels = member.querySelectorAll("label");
         if (labels.length >= 6) {
           labels[0].innerHTML = `${tr.name} <span class="star">*</span>`;
           labels[1].innerHTML = `${tr.lastname} <span class="star">*</span>`;
           labels[2].innerHTML = `${tr.gender} <span class="star">*</span>`;
-          labels[3].innerHTML = `${tr.select}`; // not ideal; gender select default handled below
+          labels[3].innerHTML = `${tr.select}`;
           labels[4].innerHTML = `${tr.dob} <span class="star">*</span>`;
           labels[5].innerHTML = `${tr.age}`;
         }
-        // update remove button text
         const rem = member.querySelector(".removeBtn");
         if (rem) rem.textContent = tr.remove;
-        // update member gender select default option
         const mGender = member.querySelector(".mgender");
         if (mGender) mGender.options[0].text = tr.select;
       });
     }
-    // initial language
     applyLanguage(langSelect.value);
     langSelect.addEventListener("change", () => applyLanguage(langSelect.value));
 
-    // ---------- AGE calculation binding ----------
+    // ---------- AGE calculation ----------
     document.getElementById("dob").addEventListener("change", function(){
       document.getElementById("age").value = calculateAgeExact(this.value);
     });
 
-    // ---------- Add family member (uses current language) ----------
+    // ---------- Add family member ----------
     function addMember() {
       const lang = langSelect.value;
       const tr = translations[lang] || translations.en;
 
       const div = document.createElement("div");
       div.classList.add("member");
-      // Build labels using translations for current language
       div.innerHTML = `
         <div class="form-group"><label>${tr.name} <span class="star">*</span></label><input type="text" class="mname" required></div>
         <div class="form-group"><label>${tr.lastname} <span class="star">*</span></label><input type="text" class="mlastname" required></div>
@@ -254,7 +245,6 @@
       `;
       document.getElementById("familyMembers").appendChild(div);
 
-      // events
       div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
       div.querySelector(".mdob").addEventListener("change", function() {
         div.querySelector(".mage").value = calculateAgeExact(this.value);
@@ -262,23 +252,7 @@
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // ---------- DUPLICATE CHECK (only by name + lastname + DateOfBirth) ----------
-    async function checkDuplicateByNameLastnameDob(name, lastname, formattedDob) {
-      // SheetDB search endpoint — only using name + Lastname + DateOfBirth per your request
-      const url = `${sheetURL}/search?name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(formattedDob)}`;
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("search failed");
-        const data = await res.json();
-        // SheetDB returns array of matched rows
-        return (Array.isArray(data) && data.length > 0);
-      } catch (err) {
-        console.error("Duplicate check error:", err);
-        throw err;
-      }
-    }
-
-    // ---------- SUBMIT ----------
+    // ---------- FORM SUBMIT WITH DUPLICATE CHECK ----------
     document.getElementById("regForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const lang = langSelect.value;
@@ -294,12 +268,15 @@
         const dobRaw = document.getElementById("dob").value;
         const formattedDob = formatToDDMMMYYYY(dobRaw);
 
-        // check duplicate
+        // ----- DUPLICATE CHECK -----
+        const url = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(formattedDob)}`;
         let isDup = false;
         try {
-          isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob);
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("search failed");
+          const data = await res.json();
+          isDup = Array.isArray(data) && data.length > 0;
         } catch (err) {
-          // show check error message and abort (so user can try again)
           alert(tr.messages.savingError);
           registerBtn.disabled = false;
           registerBtn.textContent = tr.register;
@@ -307,13 +284,13 @@
         }
 
         if (isDup) {
-          alert(tr.messages.duplicate);
+          alert(tr.messages.duplicate);  // ⚠️ Already registered
           registerBtn.disabled = false;
           registerBtn.textContent = tr.register;
-          return;
+          return; // stop saving
         }
 
-        // not duplicate -> save main record
+        // ----- SAVE MAIN RECORD -----
         const mainData = {
           name,
           Lastname: lastname,
@@ -331,7 +308,7 @@
           body: JSON.stringify({ data: [ mainData ] })
         });
 
-        // save family members (no duplicate check requested for members)
+        // ----- SAVE FAMILY MEMBERS -----
         const members = document.querySelectorAll(".member");
         for (const m of members) {
           const mdobRaw = m.querySelector(".mdob").value;
@@ -341,7 +318,7 @@
             gender: m.querySelector(".mgender").value,
             Phone: "",
             Email: "",
-            Relation: m.querySelector(".mrelation") ? m.querySelector(".mrelation").value : "",
+            Relation: "",
             DateOfBirth: formatToDDMMMYYYY(mdobRaw),
             Age: calculateAgeExact(mdobRaw)
           };
@@ -353,21 +330,18 @@
         }
 
         alert(tr.messages.saved);
-        // reset
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
+
       } catch (err) {
         console.error("Submit error:", err);
         alert("Error saving registration. Please try again.");
       } finally {
         registerBtn.disabled = false;
-        document.getElementById("registerBtn").textContent = translations[lang].register;
+        registerBtn.textContent = tr.register;
       }
     });
-
-    // apply initial language on load
-    applyLanguage(langSelect.value);
   </script>
 </body>
 </html>
