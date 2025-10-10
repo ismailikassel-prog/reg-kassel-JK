@@ -130,13 +130,13 @@
         title:"Registration for Imamat Day Celebration", 
         name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register", remove:"Remove", 
         messages:{
-          duplicate: "STOP: You Have Already Registered", 
-          savingError:"Error checking duplicates — please try again.", 
+          duplicate: "STOP: You Have Already Registered",
+          savingError:"STOP: You Have Already Registered",
           saved:"✅ Registration submitted successfully!"
         }
       },
-      de: { title:"Anmeldung zur Imamat-Tag Feier", name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren", remove:"Entfernen", messages:{duplicate:"STOP: You Have Already Registered", savingError:"Fehler beim Prüfen auf Duplikate — bitte versuchen Sie es erneut.", saved:"✅ Registrierung erfolgreich übermittelt!"}},
-      fa: { title:"ثبت نام جشن روز امامت", name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام", remove:"حذف", messages:{duplicate:"STOP: You Have Already Registered", savingError:"خطا در بررسی رکورد تکراری — لطفاً دوباره تلاش کنید.", saved:"✅ ثبت نام با موفقیت ارسال شد!"}}
+      de: { title:"Anmeldung zur Imamat-Tag Feier", name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren", remove:"Entfernen", messages:{duplicate:"STOP: You Have Already Registered", savingError:"STOP: You Have Already Registered", saved:"✅ Registrierung erfolgreich übermittelt!"}},
+      fa: { title:"ثبت نام جشن روز امامت", name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام", remove:"حذف", messages:{duplicate:"STOP: You Have Already Registered", savingError:"STOP: You Have Already Registered", saved:"✅ ثبت نام با موفقیت ارسال شد!"}}
     };
 
     function formatToDDMMMYYYY(dateInput){if(!dateInput) return ""; const d = new Date(dateInput); if(isNaN(d)) return ""; const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; const dd = String(d.getDate()).padStart(2,"0"); return `${dd}-${months[d.getMonth()]}-${d.getFullYear()}`;}
@@ -183,7 +183,7 @@
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML="";
         document.getElementById("age").value="";
-      }catch(err){ console.error(err); showToastMessage("Error saving registration. Please try again.","error"); }
+      }catch(err){ console.error(err); showToastMessage(tr.messages.savingError,"error"); }
       finally{ registerBtn.disabled=false; registerBtn.textContent=translations[lang].register; }
     });
   </script>
