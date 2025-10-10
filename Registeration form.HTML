@@ -110,6 +110,39 @@
     </form>
   </div>
 
+  <!-- --------- Popup Message Modal --------- -->
+  <div id="popupMsg" style="
+      display:none;
+      position:fixed;
+      top:0; left:0; right:0; bottom:0;
+      background:rgba(0,0,0,0.5);
+      z-index:9999;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+  ">
+    <div style="
+        background:#fff;
+        padding:24px 32px;
+        border-radius:12px;
+        text-align:center;
+        max-width:400px;
+        box-shadow:0 6px 20px rgba(0,0,0,0.2);
+        font-family:'Segoe UI', sans-serif;
+    ">
+      <p id="popupText" style="font-size:16px; margin-bottom:16px;"></p>
+      <button onclick="document.getElementById('popupMsg').style.display='none'" style="
+        padding:8px 16px;
+        border:none;
+        border-radius:6px;
+        background:#007bff;
+        color:#fff;
+        font-size:14px;
+        cursor:pointer;
+      ">OK</button>
+    </div>
+  </div>
+
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
@@ -121,7 +154,7 @@
         addMember: "+ Add Family Member", register: "Register",
         remove: "Remove",
         messages: {
-          duplicate: "⚠️ You have already registered with these details!",
+          duplicate: "⚠️ You have already registered!",
           savingError: "Error checking duplicates — please try again.",
           saved: "✅ Registration submitted successfully!"
         }
@@ -133,7 +166,7 @@
         addMember: "+ Familienmitglied hinzufügen", register: "Registrieren",
         remove: "Entfernen",
         messages: {
-          duplicate: "⚠️ Sie sind mit diesen Angaben bereits registriert!",
+          duplicate: "⚠️ Sie sind bereits registriert!",
           savingError: "Fehler beim Prüfen auf Duplikate — bitte versuchen Sie es erneut.",
           saved: "✅ Registrierung erfolgreich übermittelt!"
         }
@@ -145,7 +178,7 @@
         addMember: "+ افزودن عضو خانواده", register: "ثبت نام",
         remove: "حذف",
         messages: {
-          duplicate: "⚠️ شما با این مشخصات قبلاً ثبت نام کرده‌اید!",
+          duplicate: "⚠️ شما قبلاً ثبت نام کرده‌اید!",
           savingError: "خطا در بررسی رکورد تکراری — لطفاً دوباره تلاش کنید.",
           saved: "✅ ثبت نام با موفقیت ارسال شد!"
         }
@@ -244,7 +277,6 @@
     }
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
-    // ----------- DUPLICATE CHECK -----------
     async function isDuplicate(name, lastname, formattedDob) {
       try {
         const res = await fetch(sheetURL);
@@ -279,20 +311,21 @@
         try {
           dup = await isDuplicate(name, lastname, formattedDob);
         } catch (err) {
-          alert(tr.messages.savingError);
+          document.getElementById("popupText").textContent = tr.messages.savingError;
+          document.getElementById("popupMsg").style.display = "flex";
           registerBtn.disabled = false;
           registerBtn.textContent = tr.register;
           return;
         }
 
         if (dup) {
-          alert(tr.messages.duplicate);
+          document.getElementById("popupText").textContent = tr.messages.duplicate;
+          document.getElementById("popupMsg").style.display = "flex";
           registerBtn.disabled = false;
           registerBtn.textContent = tr.register;
           return;
         }
 
-        // save main record
         const mainData = {
           Name: name,
           Lastname: lastname,
@@ -330,13 +363,16 @@
           });
         }
 
-        alert(tr.messages.saved);
+        document.getElementById("popupText").textContent = tr.messages.saved;
+        document.getElementById("popupMsg").style.display = "flex";
+
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
       } catch (err) {
         console.error("Submit error:", err);
-        alert("Error saving registration. Please try again.");
+        document.getElementById("popupText").textContent = "Error saving registration. Please try again.";
+        document.getElementById("popupMsg").style.display = "flex";
       } finally {
         registerBtn.disabled = false;
         registerBtn.textContent = translations[lang].register;
