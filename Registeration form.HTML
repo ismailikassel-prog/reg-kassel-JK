@@ -34,7 +34,7 @@
     .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; }
     .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
     .removeBtn:hover { background:#b02a37; }
-    small.hint { display:block; margin-top:8px; color:#dc3545; font-weight:600; }
+    small.hint { display:block; margin-top:8px; font-weight:600; }
   </style>
 </head>
 <body>
@@ -133,19 +133,18 @@
       return age < 0 ? 0 : age < 1 ? 0 : age;
     }
 
-    document.getElementById("dob").addEventListener("change", function(){document.getElementById("age").value = calculateAgeExact(this.value);});
+    document.getElementById("dob").addEventListener("change", function(){
+      document.getElementById("age").value = calculateAgeExact(this.value);
+    });
 
-    async function isDuplicate(name, lastname, formattedDob){
+    async function checkDuplicateByNameLastnameDob(name, lastname, formattedDob){
+      const url = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(formattedDob)}`;
       try{
-        const res = await fetch(sheetURL);
-        if(!res.ok) throw new Error("Failed to fetch data");
+        const res = await fetch(url);
+        if(!res.ok) throw new Error("search failed");
         const data = await res.json();
-        return data.some(row =>
-          row.Name?.trim().toLowerCase() === name.toLowerCase() &&
-          row.Lastname?.trim().toLowerCase() === lastname.toLowerCase() &&
-          row.DateOfBirth?.trim() === formattedDob
-        );
-      }catch(err){console.error("Duplicate check error:",err); throw err;}
+        return Array.isArray(data) && data.length > 0;
+      }catch(err){ console.error("Duplicate check error:", err); throw err; }
     }
 
     document.getElementById("regForm").addEventListener("submit", async function(e){
@@ -159,6 +158,7 @@
 
       const hint = document.getElementById("hintText");
       hint.textContent = "";
+      hint.style.color = "#dc3545";
 
       try{
         const name = document.getElementById("name").value.trim();
@@ -166,11 +166,11 @@
         const dobRaw = document.getElementById("dob").value;
         const formattedDob = formatToDDMMMYYYY(dobRaw);
 
-        let dup = false;
-        try{ dup = await isDuplicate(name, lastname, formattedDob); }
+        let isDup = false;
+        try{ isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob); }
         catch(err){ hint.textContent = tr.messages.savingError; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
-        if(dup){ hint.textContent = tr.messages.duplicate; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+        if(isDup){ hint.textContent = tr.messages.duplicate; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
 
         const mainData = {
           Name: name,
@@ -208,7 +208,6 @@
         document.getElementById("age").value = "";
       }catch(err){
         console.error("Submit error:",err);
-        hint.style.color = "#dc3545";
         hint.textContent = "Error saving registration. Please try again.";
       }finally{
         registerBtn.disabled = false;
@@ -216,7 +215,7 @@
       }
     });
 
-    // Language select handling
+    // Language selection logic (kept from original)
     const langSelect = document.getElementById("langSelect");
     function applyLanguage(lang){
       const tr = translations[lang] || translations.en;
@@ -224,8 +223,7 @@
       document.getElementById("lblName").innerHTML = `${tr.name} <span class="star">*</span>`;
       document.getElementById("lblLastname").innerHTML = `${tr.lastname} <span class="star">*</span>`;
       document.getElementById("lblGender").innerHTML = `${tr.gender} <span class="star">*</span>`;
-      const genderSelect = document.getElementById("gender");
-      genderSelect.options[0].text = tr.select;
+      document.getElementById("gender").options[0].text = tr.select;
       document.getElementById("lblPhone").innerHTML = `${tr.phone} <span class="star">*</span>`;
       document.getElementById("lblEmail").innerHTML = `${tr.email} <span class="star">*</span>`;
       document.getElementById("lblDob").innerHTML = `${tr.dob} <span class="star">*</span>`;
@@ -233,9 +231,42 @@
       document.getElementById("addFamilyBtn").textContent = tr.addMember;
       document.getElementById("registerBtn").textContent = tr.register;
       document.getElementById("hintText").textContent = "";
+      document.body.style.direction = (lang==='fa')?'rtl':'ltr';
+      document.body.style.textAlign = (lang==='fa')?'right':'left';
     }
     applyLanguage(langSelect.value);
-    langSelect.addEventListener("change", ()=>applyLanguage(langSelect.value));
+    langSelect.addEventListener("change",()=>applyLanguage(langSelect.value));
+
+    // Family member addition logic (kept from original)
+    function addMember(){
+      const lang = langSelect.value;
+      const tr = translations[lang] || translations.en;
+
+      const div = document.createElement("div");
+      div.classList.add("member");
+      div.innerHTML = `
+        <div class="form-group"><label>${tr.name} <span class="star">*</span></label><input type="text" class="mname" required></div>
+        <div class="form-group"><label>${tr.lastname} <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group"><label>${tr.gender} <span class="star">*</span></label>
+          <select class="mgender" required>
+            <option value="">${tr.select}</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>${tr.dob} <span class="star">*</span></label><input type="date" class="mdob" required></div>
+        <div class="form-group"><label>${tr.age}</label><input type="text" class="mage" readonly></div>
+        <div style="text-align:${(lang==='fa')?'right':'left'};"><button type="button" class="removeBtn">${tr.remove}</button></div>
+      `;
+      document.getElementById("familyMembers").appendChild(div);
+
+      div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
+      div.querySelector(".mdob").addEventListener("change",function(){
+        div.querySelector(".mage").value = calculateAgeExact(this.value);
+      });
+    }
+    document.getElementById("addFamilyBtn").addEventListener("click",addMember);
   </script>
 </body>
 </html>
