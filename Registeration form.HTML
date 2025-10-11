@@ -25,14 +25,22 @@
     .header h2 { margin:0; font-size:20px; }
     .lang-select { margin:12px 0; font-weight:600; }
     .form-box { background:#f9f9f9; padding:14px; border-radius:10px; border:1px solid #e1e1e1; margin-bottom:14px; }
-    .form-group { display:flex; align-items:center; margin-bottom:10px; }
+    .form-group { display:flex; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
     .form-group label { width:140px; font-weight:600; color:#333; }
     .form-group input, .form-group select { flex:1; padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
     .star { color:red; margin-left:4px; }
     button { width:100%; padding:12px; border:none; border-radius:8px; background:#007bff; color:#fff; font-size:16px; cursor:pointer; }
     button:hover { background:#0056b3; }
     .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; position:relative; }
-    .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
+    .removeBtn {
+      background:#dc3545;
+      padding:6px 8px;
+      border-radius:6px;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-size:13px;
+    }
     .removeBtn:hover { background:#b02a37; }
 
     #toastMessage {
@@ -49,10 +57,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: top 0.5s ease;
     }
-
-    /* for gender + relation side by side */
-    .row-two { display: flex; gap: 10px; }
-    .row-two .form-group { flex: 1; }
   </style>
 </head>
 <body>
@@ -127,16 +131,6 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    const translations = {
-      en: { 
-        title:"Registration for Imamat Day Celebration", 
-        name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register", remove:"Remove", 
-        messages:{ duplicate:"STOP: You Have Already Registered", saved:"✅ Registration submitted successfully!" }
-      },
-      de: { title:"Anmeldung zur Imamat-Tag Feier", name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren", remove:"Entfernen", messages:{duplicate:"STOP: You Have Already Registered", saved:"✅ Registrierung erfolgreich übermittelt!"}},
-      fa: { title:"ثبت نام جشن روز امامت", name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام", remove:"حذف", messages:{duplicate:"STOP: You Have Already Registered", saved:"✅ ثبت نام با موفقیت ارسال شد!"}}
-    };
-
     function formatToDDMMMYYYY(dateInput){
       if(!dateInput) return ""; 
       const d = new Date(dateInput); 
@@ -170,49 +164,44 @@
     }
 
     function addMember(){
-      const lang = document.getElementById("langSelect").value;
-      const tr = translations[lang] || translations.en;
       const div = document.createElement("div");
       div.classList.add("member");
       div.innerHTML=`
-        <div class="form-group"><label>${tr.name} <span class="star">*</span></label><input type="text" class="mname" required></div>
-        <div class="form-group"><label>${tr.lastname} <span class="star">*</span></label><input type="text" class="mlastname" required></div>
-
-        <div class="row-two">
-          <div class="form-group">
-            <label>${tr.gender} <span class="star">*</span></label>
-            <select class="mgender" required>
-              <option value="">${tr.select}</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Relation <span class="star">*</span></label>
-            <select class="mrelation" required>
-              <option value="">Select</option>
-              <option>Husband</option>
-              <option>Wife</option>
-              <option>Son</option>
-              <option>Daughter</option>
-              <option>Mother</option>
-              <option>Father</option>
-              <option>Brother</option>
-              <option>Sister</option>
-              <option>Other</option>
-            </select>
-          </div>
+        <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" class="mname" required></div>
+        <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group">
+          <label>Gender <span class="star">*</span></label>
+          <select class="mgender" required>
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
-
-        <div class="form-group"><label>${tr.dob} <span class="star">*</span></label><input type="date" class="mdob" required></div>
-        <div class="form-group"><label>${tr.age}</label><input type="text" class="mage" readonly></div>
-        <div style="text-align:${(lang==='fa')?'right':'left'};"><button type="button" class="removeBtn">${tr.remove}</button></div>
+        <div class="form-group">
+          <label>Relation <span class="star">*</span></label>
+          <select class="mrelation" required>
+            <option value="">Select</option>
+            <option>Husband</option>
+            <option>Wife</option>
+            <option>Son</option>
+            <option>Daughter</option>
+            <option>Mother</option>
+            <option>Father</option>
+            <option>Brother</option>
+            <option>Sister</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Date of Birth <span class="star">*</span></label><input type="date" class="mdob" required></div>
+        <div class="form-group"><label>Age</label><input type="text" class="mage" readonly></div>
+        <div style="text-align:left;"><button type="button" class="removeBtn">Remove</button></div>
       `;
       document.getElementById("familyMembers").appendChild(div);
       div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
       div.querySelector(".mdob").addEventListener("change",function(){ div.querySelector(".mage").value = calculateAgeExact(this.value); });
     }
+
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
 
     document.getElementById("regForm").addEventListener("submit", async function(e){
@@ -220,6 +209,8 @@
 
       const name = document.getElementById("name").value.trim();
       const lastname = document.getElementById("lastname").value.trim();
+      if(!name || !lastname){ showToastMessage("Please enter name and lastname","error"); return; }
+
       const dobRaw = document.getElementById("dob").value;
       const formattedDob = formatToDDMMMYYYY(dobRaw);
 
@@ -235,11 +226,14 @@
       };
 
       try {
-        // ✅ ensure name saving works
-        if (!name || !lastname) { showToastMessage("Name and Lastname are required","error"); return; }
+        // ✅ Ensure Name saves correctly to Google Sheet
+        await fetch(sheetURL, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({data:[mainData]})
+        });
 
-        await fetch(sheetURL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({data:[mainData]})});
-
+        // Save family members
         const members = document.querySelectorAll(".member");
         for(const m of members){
           const mdobRaw = m.querySelector(".mdob").value;
@@ -247,12 +241,17 @@
             Name:m.querySelector(".mname").value.trim(),
             Lastname:m.querySelector(".mlastname").value.trim(),
             Gender:m.querySelector(".mgender").value,
-            Phone:"", Email:"",
+            Phone:"",
+            Email:"",
             Relation:m.querySelector(".mrelation").value,
             DateOfBirth:formatToDDMMMYYYY(mdobRaw),
             Age:calculateAgeExact(mdobRaw)
           };
-          await fetch(sheetURL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({data:[memberData]})});
+          await fetch(sheetURL, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({data:[memberData]})
+          });
         }
 
         showToastMessage("✅ Registration submitted successfully!","success");
