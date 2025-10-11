@@ -111,12 +111,12 @@
       background:var(--danger);
       color:white;
       border:none;
-      padding:4px 6px; /* Reduced padding */
+      padding:4px 6px;
       border-radius:6px;
       cursor:pointer;
-      font-size:12px; /* Smaller font size */
-      width: 50%; /* Makes the button half the size of the container */
-      display: inline-block; /* Ensures it stays inline with other elements */
+      font-size:12px;
+      width: 50%;
+      display: inline-block;
     }
 
     /* buttons */
@@ -217,7 +217,7 @@
 
           <div class="section">
             <div style="display:flex; gap:12px; align-items:center; justify-content:space-between;">
-              <h3 style="margin:0; font-size:16px;">Family Members</h3>
+              <h3 style="margin:0; font-size:16px;" id="familyTitle">Family Members</h3>
             </div>
 
             <div id="familyMembers"></div>
@@ -238,15 +238,70 @@
   <div id="toastMessage" role="status" aria-live="polite"></div>
 
   <script>
-    const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
-
     const translations = {
-      en: { title: "Registration for Imamat Day Celebration", name: "Name", lastname: "Lastname", gender: "Gender", select: "Select", phone: "Phone", email: "Email", dob: "Date of Birth", age: "Age", addMember: "+ Add Family Member", register: "Register", remove: "Remove", messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ Registration submitted successfully!" } },
-      de: { title: "Anmeldung zur Imamat-Tag Feier", name: "Vorname", lastname: "Nachname", gender: "Geschlecht", select: "Auswählen", phone: "Telefon", email: "E-Mail", dob: "Geburtsdatum", age: "Alter", addMember: "+ Familienmitglied hinzufügen", register: "Registrieren", remove: "Entfernen", messages: { duplicate: "STOP: Sie haben sich bereits registriert", saved: "✅ Registrierung erfolgreich eingereicht!" } },
-      fa: { title: "ثبت نام برای جشن روز امامات", name: "نام", lastname: "نام خانوادگی", gender: "جنسیت", select: "انتخاب کنید", phone: "تلفن", email: "ایمیل", dob: "تاریخ تولد", age: "سن", addMember: "+ افزودن عضو خانواده", register: "ثبت نام", remove: "حذف", messages: { duplicate: "STOP: شما قبلاً ثبت نام کرده‌اید", saved: "✅ ثبت‌نام با موفقیت ارسال شد!" } }
+      en: { title: "Registration for Imamat Day Celebration", name: "Name", lastname: "Lastname", gender: "Gender", select: "Select", phone: "Phone", email: "Email", dob: "Date of Birth", age: "Age", addMember: "+ Add Family Member", register: "Register", remove: "Remove" },
+      de: { title: "Anmeldung zur Imamat-Tag Feier", name: "Vorname", lastname: "Nachname", gender: "Geschlecht", select: "Auswählen", phone: "Telefon", email: "E-Mail", dob: "Geburtsdatum", age: "Alter", addMember: "+ Familienmitglied hinzufügen", register: "Registrieren", remove: "Entfernen" },
+      fa: { title: "ثبت نام برای جشن روز امامت", name: "نام", lastname: "نام خانوادگی", gender: "جنسیت", select: "انتخاب کنید", phone: "تلفن", email: "ایمیل", dob: "تاریخ تولد", age: "سن", addMember: "+ افزودن عضو خانواده", register: "ثبت نام", remove: "حذف" }
     };
 
-    // Code for form handling here...
+    const langSelect = document.getElementById("langSelect");
+    const title = document.querySelector(".title");
+    const labels = {
+      name: document.querySelector('label[for="name"]'),
+      lastname: document.querySelector('label[for="lastname"]'),
+      gender: document.querySelector('label[for="gender"]'),
+      phone: document.querySelector('label[for="phone"]'),
+      email: document.querySelector('label[for="email"]'),
+      dob: document.querySelector('label[for="dob"]'),
+      age: document.querySelector('label[for="age"]')
+    };
+    const addFamilyBtn = document.getElementById("addFamilyBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const familyTitle = document.getElementById("familyTitle");
+    const familyMembers = document.getElementById("familyMembers");
+
+    // LANGUAGE SWITCH
+    langSelect.addEventListener("change", () => {
+      const lang = langSelect.value;
+      const t = translations[lang];
+      title.textContent = t.title;
+      labels.name.childNodes[0].nodeValue = t.name + " ";
+      labels.lastname.childNodes[0].nodeValue = t.lastname + " ";
+      labels.gender.childNodes[0].nodeValue = t.gender + " ";
+      labels.phone.childNodes[0].nodeValue = t.phone + " ";
+      labels.email.childNodes[0].nodeValue = t.email + " ";
+      labels.dob.childNodes[0].nodeValue = t.dob + " ";
+      labels.age.childNodes[0].nodeValue = t.age + " ";
+      addFamilyBtn.textContent = t.addMember;
+      registerBtn.textContent = t.register;
+      familyTitle.textContent = lang === "fa" ? "اعضای خانواده" : "Family Members";
+      // Update remove buttons in family members if any
+      document.querySelectorAll(".removeBtn").forEach(btn => btn.textContent = t.remove);
+    });
+
+    // ADD FAMILY MEMBER
+    addFamilyBtn.addEventListener("click", () => {
+      const lang = langSelect.value;
+      const t = translations[lang];
+      const div = document.createElement("div");
+      div.className = "member";
+      div.innerHTML = `
+        <div class="form-group"><label>${t.name} <span class="star">*</span></label><input type="text" required></div>
+        <div class="form-group"><label>${t.lastname} <span class="star">*</span></label><input type="text" required></div>
+        <div class="form-group"><label>${t.gender} <span class="star">*</span></label>
+          <select required>
+            <option value="">${t.select}</option>
+            <option value="Male">${lang === 'fa' ? 'مرد' : lang === 'de' ? 'Männlich' : 'Male'}</option>
+            <option value="Female">${lang === 'fa' ? 'زن' : lang === 'de' ? 'Weiblich' : 'Female'}</option>
+            <option value="Other">${lang === 'fa' ? 'دیگر' : lang === 'de' ? 'Andere' : 'Other'}</option>
+          </select>
+        </div>
+        <button type="button" class="removeBtn">${t.remove}</button>
+      `;
+      const removeBtn = div.querySelector(".removeBtn");
+      removeBtn.addEventListener("click", () => div.remove());
+      familyMembers.appendChild(div);
+    });
   </script>
 </body>
 </html>
