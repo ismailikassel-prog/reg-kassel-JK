@@ -2,142 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kassel JK Registration</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center/cover fixed no-repeat;
+      margin: 0; padding: 0;
     }
     .container {
-      max-width: 600px;
-      margin: 30px auto;
-      background: #fff;
+      background: rgba(255,255,255,0.93);
+      max-width: 650px;
+      margin: 40px auto;
       padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: relative;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      color: #333;
+      margin-bottom: 15px;
     }
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     label {
       display: block;
-      font-weight: bold;
+      font-weight: 600;
       margin-bottom: 5px;
     }
     input, select {
       width: 100%;
       padding: 8px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      font-size: 14px;
     }
     button {
-      padding: 10px 15px;
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 18px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      font-size: 15px;
       cursor: pointer;
     }
-    #submitBtn {
-      background: #28a745;
-      color: white;
-      width: 100%;
-    }
-    #addFamilyBtn {
-      background: #007bff;
-      color: white;
-      width: 100%;
-      margin-top: 15px;
+    button:hover {
+      background-color: #0056b3;
     }
     .removeBtn {
-      background: #dc3545;
-      color: white;
-      font-size: 12px;
-      padding: 5px 8px;
-      margin-top: 5px;
-      border-radius: 4px;
-    }
-    .member {
-      border: 1px solid #ddd;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 12px;
-      background: #f6f6f6;
+      background-color: #dc3545 !important;
+      padding: 4px 8px !important;
+      font-size: 13px;
+      margin-top: 4px;
     }
     #toastMessage {
       position: fixed;
-      top: 15px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #28a745;
+      padding: 14px 24px;
+      border-radius: 10px;
       color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      display: none;
       font-weight: bold;
-      z-index: 9999;
+      font-size: 16px;
+      display: none;
+      z-index: 1000;
     }
+    .star { color: red; }
   </style>
 </head>
 <body>
-  <div id="toastMessage"></div>
+
   <div class="container">
     <h2>Kassel JK Registration</h2>
+
     <form id="regForm">
+
       <div class="form-group">
-        <label>Name <span style="color:red">*</span></label>
-        <input type="text" id="name" required />
-      </div>
-      <div class="form-group">
-        <label>Lastname <span style="color:red">*</span></label>
-        <input type="text" id="lastname" required />
-      </div>
-      <div class="form-group">
-        <label>Gender <span style="color:red">*</span></label>
-        <select id="gender" required>
-          <option value="">Select</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
+        <label>Language <span class="star">*</span></label>
+        <select id="language" required>
+          <option value="">Select Language</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="fa">فارسی</option>
         </select>
       </div>
+
       <div class="form-group">
-        <label>Phone</label>
-        <input type="text" id="phone" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="email" />
-      </div>
-      <div class="form-group">
-        <label>Date of Birth <span style="color:red">*</span></label>
-        <input type="date" id="dob" required />
-      </div>
-      <div class="form-group">
-        <label>Age</label>
-        <input type="text" id="age" readonly />
+        <label>Name <span class="star">*</span></label>
+        <input type="text" id="name" required>
       </div>
 
+      <div class="form-group">
+        <label>Lastname <span class="star">*</span></label>
+        <input type="text" id="lastname" required>
+      </div>
+
+      <div class="form-group">
+        <label>Gender <span class="star">*</span></label>
+        <select id="gender" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Date of Birth <span class="star">*</span></label>
+        <input type="date" id="dob" required>
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input type="text" id="age" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" id="phone">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email">
+      </div>
+
+      <button type="button" id="addFamilyBtn">Add Family Member</button>
+
       <div id="familyMembers"></div>
-      <button type="button" id="addFamilyBtn">+ Add Family Member</button>
-      <button type="submit" id="submitBtn">Submit</button>
+
+      <button type="submit">Register</button>
     </form>
   </div>
 
+  <div id="toastMessage"></div>
+
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
+    const translations = {
+      en:{ messages:{ duplicate:"STOP: You Have Already Registered", saved:"✅ Registration submitted successfully!" } },
+      de:{ messages:{ duplicate:"STOP: You Have Already Registered", saved:"✅ Registrierung erfolgreich übermittelt!" } },
+      fa:{ messages:{ duplicate:"STOP: You Have Already Registered", saved:"✅ ثبت نام با موفقیت ارسال شد!" } }
+    };
 
-    function showToastMessage(msg, type="success") {
-      const toast = document.getElementById("toastMessage");
-      toast.textContent = msg;
-      toast.style.backgroundColor = type === "success" ? "#28a745" : "#dc3545";
-      toast.style.display = "block";
-      setTimeout(() => toast.style.display = "none", 4000);
+    function showToastMessage(msg,type="success"){
+      const toast=document.getElementById("toastMessage");
+      toast.textContent=msg;
+      toast.style.backgroundColor=type==="success"?"#28a745":"#dc3545";
+      toast.style.display="block";
+      toast.style.top="20px";
     }
 
     function formatToDDMMMYYYY(dateInput){
@@ -147,7 +164,6 @@
       const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       return `${String(d.getDate()).padStart(2,"0")}-${months[d.getMonth()]}-${d.getFullYear()}`;
     }
-
     function calculateAgeExact(dateInput){
       if(!dateInput)return"";
       const dob=new Date(dateInput);
@@ -173,18 +189,17 @@
       const div=document.createElement("div");
       div.className="member";
       div.innerHTML=`
-        <div class="form-group"><label>Name <span style="color:red">*</span></label><input type="text" class="mname" required></div>
-        <div class="form-group"><label>Lastname <span style="color:red">*</span></label><input type="text" class="mlastname" required></div>
-        <div class="form-group"><label>Gender <span style="color:red">*</span></label>
+        <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" class="mname" required></div>
+        <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" class="mlastname" required></div>
+        <div class="form-group"><label>Gender <span class="star">*</span></label>
           <select class="mgender" required>
-            <option value="">Select</option><option>Male</option><option>Female</option><option>Other</option>
+            <option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
           </select></div>
-        <div class="form-group"><label>Relation <span style="color:red">*</span></label>
+        <div class="form-group"><label>Relation <span class="star">*</span></label>
           <select class="mrelation" required>
-            <option value="">Select</option><option>Husband</option><option>Wife</option><option>Son</option><option>Daughter</option>
-            <option>Mother</option><option>Father</option><option>Brother</option><option>Sister</option><option>Other</option>
+            <option value="">Select</option><option value="Husband">Husband</option><option value="Wife">Wife</option><option value="Son">Son</option><option value="Daughter">Daughter</option><option value="Mother">Mother</option><option value="Father">Father</option><option value="Brother">Brother</option><option value="Sister">Sister</option><option value="Other">Other</option>
           </select></div>
-        <div class="form-group"><label>Date of Birth <span style="color:red">*</span></label><input type="date" class="mdob" required></div>
+        <div class="form-group"><label>Date of Birth <span class="star">*</span></label><input type="date" class="mdob" required></div>
         <div class="form-group"><label>Age</label><input type="text" class="mage" readonly></div>
         <button type="button" class="removeBtn">Remove</button>`;
       document.getElementById("familyMembers").appendChild(div);
@@ -195,15 +210,14 @@
     }
 
     document.getElementById("addFamilyBtn").addEventListener("click",addMember);
-
-    // Calculate age for main registrant
     document.getElementById("dob").addEventListener("change",function(){
-      document.getElementById("age").value = calculateAgeExact(this.value);
+      document.getElementById("age").value=calculateAgeExact(this.value);
     });
 
     document.getElementById("regForm").addEventListener("submit",async e=>{
       e.preventDefault();
-
+      const lang=document.getElementById("language").value||"en";
+      const tr=translations[lang];
       const name=document.getElementById("name").value.trim();
       const lastname=document.getElementById("lastname").value.trim();
       const gender=document.getElementById("gender").value;
@@ -211,21 +225,17 @@
       const formattedDob=formatToDDMMMYYYY(dob);
 
       if(await checkDuplicate(name,lastname,formattedDob)){
-        showToastMessage("STOP: You Have Already Registered","error");
+        showToastMessage(tr.messages.duplicate,"error");
         return;
       }
 
       const mainData={
-        name:name,
-        Lastname:lastname,
-        gender:gender,
+        name,Lastname:lastname,gender,
         Phone:document.getElementById("phone").value.trim(),
         Email:document.getElementById("email").value.trim(),
-        DateOfBirth:formattedDob,
-        Age:calculateAgeExact(dob),
+        DateOfBirth:formattedDob,Age:calculateAgeExact(dob),
         Relation:"Family Admin"
       };
-
       await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[mainData]})});
 
       document.querySelectorAll(".member").forEach(async m=>{
@@ -234,16 +244,15 @@
           name:m.querySelector(".mname").value.trim(),
           Lastname:m.querySelector(".mlastname").value.trim(),
           gender:m.querySelector(".mgender").value,
+          Phone:"",Email:"",
           DateOfBirth:formatToDDMMMYYYY(mdob),
           Age:calculateAgeExact(mdob),
-          Phone:"",
-          Email:"",
           Relation:m.querySelector(".mrelation").value
         };
         await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[memberData]})});
       });
 
-      showToastMessage("✅ Registration submitted successfully!","success");
+      showToastMessage(tr.messages.saved,"success");
       document.getElementById("regForm").reset();
       document.getElementById("familyMembers").innerHTML="";
     });
