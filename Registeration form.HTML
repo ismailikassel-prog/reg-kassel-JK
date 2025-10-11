@@ -13,14 +13,7 @@
       --success: #28a745;
     }
     html,body{height:100%;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;}
-    .page {
-      min-height:100%;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:28px 16px;
-      box-sizing:border-box;
-    }
+    .page {min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;box-sizing:border-box;}
     .inner {width:100%;max-width:760px;}
     .header {text-align:center;margin-bottom:12px;}
     .header img.logo {width:110px;display:block;margin:0 auto 8px;}
@@ -28,7 +21,7 @@
     .lang-row {display:flex;align-items:center;gap:8px;margin:8px 0 18px;justify-content:flex-start;}
     .lang-row .globe {font-size:18px;margin-right:6px;}
     .lang-row label {font-weight:600;color:#222;display:flex;align-items:center;gap:8px;}
-    .card {background: var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
+    .card {background: var(--card-bg);border-radius:12px;padding:18px;box-shadow: 0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
     .form-row {display:flex;gap:12px;align-items:center;margin-bottom:12px;}
     .form-row .col {flex:1;min-width:0;}
     .form-group {display:flex;align-items:center;gap:12px;margin-bottom:10px;}
@@ -43,7 +36,7 @@
     .btn-primary {background:var(--accent);color:white;}
     .btn-add {background:#0b79d0;color:white;margin-top:6px;}
     #toastMessage {position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:10px;font-weight:700;color:#fff;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);cursor:pointer;}
-    @media (max-width:520px){.form-group label{width:120px;font-size:13px;}.header img.logo{width:90px;}}
+    @media (max-width:520px){.form-group label {width:120px;font-size:13px;}.header img.logo {width:90px;}}
   </style>
 </head>
 <body>
@@ -122,90 +115,93 @@
 
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
-    const translations = {
-      en: { messages: { duplicate: "STOP: You have already registered", saved: "✅ Registration submitted successfully!" } },
-      de: { messages: { duplicate: "STOP: Sie haben sich bereits registriert", saved: "✅ Registrierung erfolgreich eingereicht!" } },
-      fa: { messages: { duplicate: "STOP: شما قبلاً ثبت نام کرده‌اید", saved: "✅ ثبت‌نام با موفقیت ارسال شد!" } }
-    };
 
-    const toast = document.getElementById('toastMessage');
-    function showToast(msg, color='var(--danger)'){
-      toast.textContent = msg;
-      toast.style.background = color;
-      toast.style.display = 'block';
-      setTimeout(()=> toast.style.display='none',3000);
-    }
-
-    // Calculate age for main DOB
-    const dobInput = document.getElementById("dob");
-    const ageInput = document.getElementById("age");
-    dobInput.addEventListener("change", ()=>{
-      const val = dobInput.value;
-      if(!val){ ageInput.value=""; return; }
-      const d = new Date(val);
-      const t = new Date();
+    // Age auto calculation
+    const mainDob = document.getElementById("dob");
+    const mainAge = document.getElementById("age");
+    mainDob.addEventListener("change", () => {
+      const val = mainDob.value;
+      if (!val) { mainAge.value = ""; return; }
+      const d = new Date(val), t = new Date();
       let a = t.getFullYear() - d.getFullYear();
-      const m = t.getMonth()-d.getMonth();
-      if(m<0 || (m===0 && t.getDate()<d.getDate())) a--;
-      ageInput.value = a;
+      const m = t.getMonth() - d.getMonth();
+      if (m < 0 || (m === 0 && t.getDate() < d.getDate())) a--;
+      mainAge.value = a;
     });
 
-    // Add family members stays unchanged (use your previous JS logic)
-
-    // DUPLICATE CHECK + SUBMIT
-    document.getElementById("regForm").addEventListener("submit", async (e)=>{
+    // ====== DUPLICATE CHECK + SUBMIT ======
+    document.getElementById("regForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const lang = document.getElementById("langSelect").value || "en";
-      const msg = translations[lang].messages;
-
+      const toast = document.getElementById("toastMessage");
       const name = document.getElementById("name").value.trim();
       const lastname = document.getElementById("lastname").value.trim();
       const dob = document.getElementById("dob").value.trim();
+      const gender = document.getElementById("gender").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const age = document.getElementById("age").value;
 
-      if(!name || !lastname || !dob){
-        showToast("Please fill required fields", "var(--danger)");
+      if (!name || !lastname || !dob) {
+        toast.textContent = "Please fill required fields";
+        toast.style.background = "var(--danger)";
+        toast.style.display = "block";
+        setTimeout(() => toast.style.display = "none", 2500);
         return;
       }
 
       try {
-        // check duplicate in Google Sheet
-        const checkURL = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DOB=${encodeURIComponent(dob)}`;
+        // 1️⃣ Check for duplicates (columns: name, Lastname, DateOfBirth)
+        const checkURL = `${sheetURL}/search?name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(dob)}`;
         const res = await fetch(checkURL);
         const data = await res.json();
 
-        if(Array.isArray(data) && data.length > 0){
-          showToast(msg.duplicate, "var(--danger)");
-          return; // stop duplicate
+        if (Array.isArray(data) && data.length > 0) {
+          toast.textContent = "STOP: You have already registered";
+          toast.style.background = "var(--danger)";
+          toast.style.display = "block";
+          setTimeout(() => toast.style.display = "none", 3000);
+          return;
         }
 
-        // if not duplicate, submit form to SheetDB
-        const formData = {
-          Name: name,
-          Lastname: lastname,
-          Gender: document.getElementById("gender").value,
-          Phone: document.getElementById("phone").value,
-          Email: document.getElementById("email").value,
-          DOB: dob,
-          Age: ageInput.value
+        // 2️⃣ No duplicate -> submit new record
+        const payload = {
+          data: [{
+            name,
+            Lastname: lastname,
+            gender,
+            Phone: phone,
+            Email: email,
+            DateOfBirth: dob,
+            Age: age
+          }]
         };
 
         const saveRes = await fetch(sheetURL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: [formData] })
+          body: JSON.stringify(payload)
         });
 
-        if(saveRes.ok){
-          showToast(msg.saved, "var(--success)");
+        if (saveRes.ok) {
+          toast.textContent = "✅ Registration submitted successfully!";
+          toast.style.background = "var(--success)";
+          toast.style.display = "block";
           e.target.reset();
-          ageInput.value = "";
+          mainAge.value = "";
+          setTimeout(() => toast.style.display = "none", 2500);
         } else {
-          showToast("Error submitting form", "var(--danger)");
+          toast.textContent = "Error submitting form";
+          toast.style.background = "var(--danger)";
+          toast.style.display = "block";
+          setTimeout(() => toast.style.display = "none", 2500);
         }
 
-      } catch(err){
+      } catch (err) {
         console.error(err);
-        showToast("Network error", "var(--danger)");
+        toast.textContent = "Network error";
+        toast.style.background = "var(--danger)";
+        toast.style.display = "block";
+        setTimeout(() => toast.style.display = "none", 2500);
       }
     });
   </script>
