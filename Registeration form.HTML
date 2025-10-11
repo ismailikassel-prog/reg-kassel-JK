@@ -227,6 +227,53 @@
         registerBtn.textContent=translations[lang].register;
       }
     });
+  
+    // Add Family Member Logic
+    function addFamilyMember() {
+      const tr = translations[langSelect.value] || translations.en;
+      const membersDiv = document.getElementById("familyMembers");
+      const newMember = document.createElement("div");
+      newMember.className = "member";
+      newMember.innerHTML = `
+        <div class="form-group">
+          <label>${tr.name}</label>
+          <input type="text" class="mname" required />
+        </div>
+        <div class="form-group">
+          <label>${tr.lastname}</label>
+          <input type="text" class="mlastname" required />
+        </div>
+        <div class="form-group">
+          <label>${tr.gender}</label>
+          <select class="mgender" required>
+            <option value="" disabled selected>${tr.select}</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${tr.dob}</label>
+          <input type="date" class="mdob" required />
+        </div>
+        <div class="form-group">
+          <label>${tr.age}</label>
+          <input type="text" class="mage" readonly />
+        </div>
+        <button type="button" class="removeBtn">${tr.remove}</button>
+      `;
+      membersDiv.appendChild(newMember);
+
+      newMember.querySelector(".removeBtn").addEventListener("click", function() {
+        newMember.remove();
+      });
+      newMember.querySelector(".mdob").addEventListener("change", function() {
+        newMember.querySelector(".mage").value = calculateAgeExact(this.value);
+      });
+    }
+
+    document.getElementById("addFamilyBtn").addEventListener("click", addFamilyMember);
+
   </script>
 </body>
 </html>
