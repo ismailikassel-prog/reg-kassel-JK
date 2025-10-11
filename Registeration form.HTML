@@ -2,240 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Registration for Imamat Day Celebration</title>
+  <title>Kassel JK Registration</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg");
+      background-size: cover;
       margin: 0;
       padding: 0;
-      background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;
-      direction: ltr;
-      text-align: left;
     }
     .container {
-      max-width: 650px;
-      margin: 30px auto;
-      background: rgba(255,255,255,0.95);
-      padding: 24px 30px;
+      width: 90%;
+      max-width: 600px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    .header { text-align:center; margin-bottom:8px; }
-    .header img { width:140px; display:block; margin:0 auto 6px; }
-    .header h2 { margin:0; font-size:20px; }
-    .lang-select { margin:12px 0; font-weight:600; }
-    .form-box { background:#f9f9f9; padding:14px; border-radius:10px; border:1px solid #e1e1e1; margin-bottom:14px; }
-    .form-group { display:flex; align-items:center; margin-bottom:10px; }
-    .form-group label { width:140px; font-weight:600; color:#333; }
-    .form-group input, .form-group select { flex:1; padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-    .star { color:red; margin-left:4px; }
-    button { width:100%; padding:12px; border:none; border-radius:8px; background:#007bff; color:#fff; font-size:16px; cursor:pointer; }
-    button:hover { background:#0056b3; }
-    .member { border:1px solid #ddd; padding:12px; border-radius:8px; margin-top:12px; background:#f6f6f6; }
-    .removeBtn { background:#dc3545; padding:8px 10px; border-radius:6px; color:#fff; border:none; cursor:pointer; }
-    .removeBtn:hover { background:#b02a37; }
-    small.hint { display:block; margin-top:8px; color:#dc3545; font-weight:600; }
+    h1 {
+      text-align: center;
+      color: #800000;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      background-color: #800000;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #a52a2a;
+    }
+    #hintText {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .member {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <div class="header">
-      <img src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="Logo">
-      <h2 id="formTitle">Registration for Imamat Day Celebration</h2>
-    </div>
-
-    <div class="lang-select">
-      <label for="langSelect">Language:</label>
-      <select id="langSelect" aria-label="Language select">
-        <option value="en">English</option>
-        <option value="de">Deutsch</option>
-        <option value="fa">فارسی</option>
-      </select>
-    </div>
-
+    <h1>Kassel JK Registration</h1>
+    <p id="hintText"></p>
     <form id="regForm">
-      <div class="form-box">
-        <div class="form-group">
-          <label id="lblName">Name <span class="star">*</span></label>
-          <input type="text" id="name" required />
-        </div>
-        <div class="form-group">
-          <label id="lblLastname">Lastname <span class="star">*</span></label>
-          <input type="text" id="lastname" required />
-        </div>
-        <div class="form-group">
-          <label id="lblGender">Gender <span class="star">*</span></label>
-          <select id="gender" required>
-            <option value="" disabled selected>Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label id="lblPhone">Phone <span class="star">*</span></label>
-          <input type="text" id="phone" required />
-        </div>
-        <div class="form-group">
-          <label id="lblEmail">Email <span class="star">*</span></label>
-          <input type="email" id="email" required />
-        </div>
-        <div class="form-group">
-          <label id="lblDob">Date of Birth <span class="star">*</span></label>
-          <input type="date" id="dob" required />
-        </div>
-        <div class="form-group">
-          <label id="lblAge">Age</label>
-          <input type="text" id="age" readonly />
-        </div>
-      </div>
+      <label>First Name</label>
+      <input type="text" id="name" required>
 
-      <div class="form-box">
-        <div id="familyMembers"></div>
-        <div style="margin-top:8px;">
-          <button type="button" id="addFamilyBtn">+ Add Family Member</button>
-        </div>
-      </div>
+      <label>Last Name</label>
+      <input type="text" id="lastname" required>
 
-      <div style="margin-top:6px;">
-        <button type="submit" id="registerBtn">Register</button>
-      </div>
-      <small class="hint" id="hintText"></small>
+      <label>Gender</label>
+      <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <label>Date of Birth</label>
+      <input type="date" id="dob" required>
+      <input type="text" id="age" placeholder="Age" readonly>
+
+      <label>Phone</label>
+      <input type="text" id="phone">
+
+      <label>Email</label>
+      <input type="email" id="email">
+
+      <div id="familyMembers"></div>
+
+      <button type="button" id="addMemberBtn">Add Family Member</button><br><br>
+      <button type="submit" id="registerBtn">Register</button>
     </form>
   </div>
 
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    const translations = {
-      en: { title:"Registration for Imamat Day Celebration", name:"Name", lastname:"Lastname", gender:"Gender", select:"Select", phone:"Phone", email:"Email", dob:"Date of Birth", age:"Age", addMember:"+ Add Family Member", register:"Register", remove:"Remove", messages:{duplicate:"⚠️ You have already registered!", savingError:"Error checking duplicates — please try again.", saved:"✅ Registration submitted successfully!"}},
-      de: { title:"Anmeldung zur Imamat-Tag Feier", name:"Vorname", lastname:"Nachname", gender:"Geschlecht", select:"Wählen", phone:"Telefon", email:"E-Mail", dob:"Geburtsdatum", age:"Alter", addMember:"+ Familienmitglied hinzufügen", register:"Registrieren", remove:"Entfernen", messages:{duplicate:"⚠️ Sie sind mit diesen Angaben bereits registriert!", savingError:"Fehler beim Prüfen auf Duplikate — bitte versuchen Sie es erneut.", saved:"✅ Registrierung erfolgreich übermittelt!"}},
-      fa: { title:"ثبت نام جشن روز امامت", name:"نام", lastname:"نام خانوادگی", gender:"جنسیت", select:"انتخاب کنید", phone:"تلفن", email:"ایمیل", dob:"تاریخ تولد", age:"سن", addMember:"+ افزودن عضو خانواده", register:"ثبت نام", remove:"حذف", messages:{duplicate:"⚠️ شما با این مشخصات قبلاً ثبت نام کرده‌اید!", savingError:"خطا در بررسی رکورد تکراری — لطفاً دوباره تلاش کنید.", saved:"✅ ثبت نام با موفقیت ارسال شد!"}}
-    };
-
-    function formatToDDMMMYYYY(dateInput){
-      if(!dateInput) return "";
-      const d = new Date(dateInput);
-      if(isNaN(d)) return "";
-      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      const dd = String(d.getDate()).padStart(2,"0");
-      return `${dd}-${months[d.getMonth()]}-${d.getFullYear()}`;
+    // Format DOB for saving
+    function formatToDDMMMYYYY(dateStr) {
+      const date = new Date(dateStr);
+      if (isNaN(date)) return "";
+      const options = { day: "2-digit", month: "short", year: "numeric" };
+      return date.toLocaleDateString("en-GB", options).replace(/ /g, "-");
     }
 
-    function calculateAgeExact(dateInput){
-      if(!dateInput) return "";
-      const dob = new Date(dateInput);
-      if(isNaN(dob)) return "";
-      const today = new Date();
-      const thisYearBirthday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-      let age = today.getFullYear() - dob.getFullYear();
-      if(today < thisYearBirthday) age--;
-      return age < 0 ? 0 : age < 1 ? 0 : age;
+    // Calculate age
+    function calculateAgeExact(dob) {
+      const birth = new Date(dob);
+      const diff = Date.now() - birth.getTime();
+      const ageDate = new Date(diff);
+      return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
 
-    document.getElementById("dob").addEventListener("change", function(){document.getElementById("age").value = calculateAgeExact(this.value);});
+    // Add Family Member
+    document.getElementById("addMemberBtn").addEventListener("click", () => {
+      const div = document.createElement("div");
+      div.className = "member";
+      div.innerHTML = `
+        <label>First Name</label><input type="text" class="mname" required>
+        <label>Last Name</label><input type="text" class="mlastname" required>
+        <label>Gender</label>
+        <select class="mgender" required>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <label>Date of Birth</label><input type="date" class="mdob" required>
+        <button type="button" class="removeBtn">Remove</button>
+      `;
+      div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
+      document.getElementById("familyMembers").appendChild(div);
+    });
 
-    async function isDuplicate(name, lastname, formattedDob){
-      try{
-        const res = await fetch(sheetURL);
-        if(!res.ok) throw new Error("Failed to fetch data");
+    // Show age live
+    document.getElementById("dob").addEventListener("change", function() {
+      document.getElementById("age").value = calculateAgeExact(this.value);
+    });
+
+    // Duplicate check
+    async function checkDuplicate(name, lastname, dobFormatted) {
+      const url = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(dobFormatted)}`;
+      try {
+        const res = await fetch(url);
         const data = await res.json();
-        return data.some(row =>
-          row.Name?.trim().toLowerCase() === name.toLowerCase() &&
-          row.Lastname?.trim().toLowerCase() === lastname.toLowerCase() &&
-          row.DateOfBirth?.trim() === formattedDob
-        );
-      }catch(err){console.error("Duplicate check error:",err); throw err;}
+        return Array.isArray(data) && data.length > 0;
+      } catch (err) {
+        console.error("Error checking duplicate:", err);
+        return false;
+      }
     }
 
-    document.getElementById("regForm").addEventListener("submit", async function(e){
+    // Form submission
+    document.getElementById("regForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const lang = langSelect.value;
-      const tr = translations[lang] || translations.en;
-
-      const registerBtn = document.getElementById("registerBtn");
-      registerBtn.disabled = true;
-      registerBtn.textContent = tr.register + " ...";
-
       const hint = document.getElementById("hintText");
       hint.textContent = "";
+      hint.style.color = "#dc3545"; // red default
 
-      try{
-        const name = document.getElementById("name").value.trim();
-        const lastname = document.getElementById("lastname").value.trim();
-        const dobRaw = document.getElementById("dob").value;
-        const formattedDob = formatToDDMMMYYYY(dobRaw);
+      const name = document.getElementById("name").value.trim();
+      const lastname = document.getElementById("lastname").value.trim();
+      const dob = document.getElementById("dob").value;
+      const dobFormatted = formatToDDMMMYYYY(dob);
 
-        let dup = false;
-        try{ dup = await isDuplicate(name, lastname, formattedDob); }
-        catch(err){ hint.textContent = tr.messages.savingError; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+      const duplicate = await checkDuplicate(name, lastname, dobFormatted);
+      if (duplicate) {
+        hint.textContent = "⚠️ You have already registered!";
+        return;
+      }
 
-        if(dup){ hint.textContent = tr.messages.duplicate; registerBtn.disabled = false; registerBtn.textContent = tr.register; return; }
+      const mainData = {
+        Name: name,
+        Lastname: lastname,
+        gender: document.getElementById("gender").value,
+        Phone: document.getElementById("phone").value.trim(),
+        Email: document.getElementById("email").value.trim(),
+        Relation: "Family Admin",
+        DateOfBirth: dobFormatted,
+        Age: calculateAgeExact(dob)
+      };
 
-        const mainData = {
-          Name: name,
-          Lastname: lastname,
-          gender: document.getElementById("gender").value,
-          Phone: document.getElementById("phone").value.trim(),
-          Email: document.getElementById("email").value.trim(),
-          Relation: "Family Admin",
-          DateOfBirth: formattedDob,
-          Age: calculateAgeExact(dobRaw)
-        };
-
-        await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[mainData]})});
+      try {
+        await fetch(sheetURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: [mainData] })
+        });
 
         const members = document.querySelectorAll(".member");
-        for(const m of members){
-          const mdobRaw = m.querySelector(".mdob").value;
+        for (const m of members) {
+          const mdob = m.querySelector(".mdob").value;
           const memberData = {
             Name: m.querySelector(".mname").value.trim(),
             Lastname: m.querySelector(".mlastname").value.trim(),
             gender: m.querySelector(".mgender").value,
-            Phone:"",
-            Email:"",
-            Relation:"",
-            DateOfBirth: formatToDDMMMYYYY(mdobRaw),
-            Age: calculateAgeExact(mdobRaw)
+            Phone: "",
+            Email: "",
+            Relation: "",
+            DateOfBirth: formatToDDMMMYYYY(mdob),
+            Age: calculateAgeExact(mdob)
           };
-          await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:[memberData]})});
+          await fetch(sheetURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: [memberData] })
+          });
         }
 
         hint.style.color = "#28a745";
-        hint.textContent = tr.messages.saved;
+        hint.textContent = "✅ Registration successful!";
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
-      }catch(err){
-        console.error("Submit error:",err);
-        hint.style.color = "#dc3545";
+      } catch (err) {
+        console.error("Save error:", err);
         hint.textContent = "Error saving registration. Please try again.";
-      }finally{
-        registerBtn.disabled = false;
-        registerBtn.textContent = tr.register;
       }
     });
-
-    // Language select handling
-    const langSelect = document.getElementById("langSelect");
-    function applyLanguage(lang){
-      const tr = translations[lang] || translations.en;
-      document.getElementById("formTitle").textContent = tr.title;
-      document.getElementById("lblName").innerHTML = `${tr.name} <span class="star">*</span>`;
-      document.getElementById("lblLastname").innerHTML = `${tr.lastname} <span class="star">*</span>`;
-      document.getElementById("lblGender").innerHTML = `${tr.gender} <span class="star">*</span>`;
-      const genderSelect = document.getElementById("gender");
-      genderSelect.options[0].text = tr.select;
-      document.getElementById("lblPhone").innerHTML = `${tr.phone} <span class="star">*</span>`;
-      document.getElementById("lblEmail").innerHTML = `${tr.email} <span class="star">*</span>`;
-      document.getElementById("lblDob").innerHTML = `${tr.dob} <span class="star">*</span>`;
-      document.getElementById("lblAge").textContent = tr.age;
-      document.getElementById("addFamilyBtn").textContent = tr.addMember;
-      document.getElementById("registerBtn").textContent = tr.register;
-      document.getElementById("hintText").textContent = "";
-    }
-    applyLanguage(langSelect.value);
-    langSelect.addEventListener("change", ()=>applyLanguage(langSelect.value));
   </script>
 </body>
 </html>
