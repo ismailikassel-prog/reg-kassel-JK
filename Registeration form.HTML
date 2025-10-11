@@ -13,28 +13,28 @@
       --success: #28a745;
     }
     html,body{height:100%;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;}
-    .page {min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;box-sizing:border-box;}
-    .inner {width:100%;max-width:760px;}
-    .header {text-align:center;margin-bottom:12px;}
-    .header img.logo {width:110px;display:block;margin:0 auto 8px;}
-    h1.title {margin:0 0 12px;font-size:22px;color:#222;text-align:center;font-weight:700;}
-    .lang-row {display:flex;align-items:center;gap:8px;margin:8px 0 18px;justify-content:flex-start;}
-    .lang-row .globe {font-size:18px;margin-right:6px;}
-    .lang-row label {font-weight:600;color:#222;display:flex;align-items:center;gap:8px;}
-    .card {background: var(--card-bg);border-radius:12px;padding:18px;box-shadow: 0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
-    .form-group {display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-    .form-group label {width:160px;font-weight:600;color:#333;}
-    .form-group input,.form-group select {flex:1;padding:10px 12px;border-radius:8px;border:1px solid #d9d9d9;font-size:14px;background:white;box-sizing:border-box;}
-    .star {color:#d93025;margin-left:6px;}
-    .section {margin-top:18px;}
-    #familyMembers {margin-top:6px;}
-    .member {background:#fbfbfb;border:1px solid #ececec;border-radius:10px;padding:12px;margin-bottom:12px;position:relative;}
-    .member .removeBtn {background:var(--danger);color:white;border:none;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:12px;width:50%;display:inline-block;}
-    .btn {width:100%;padding:12px;border-radius:9px;border:none;font-weight:700;cursor:pointer;font-size:15px;}
-    .btn-primary {background:var(--accent);color:white;}
-    .btn-add {background:#0b79d0;color:white;margin-top:6px;}
-    #toastMessage {position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:10px;font-weight:700;color:#fff;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);cursor:pointer;}
-    @media (max-width:520px){.form-group label {width:120px;font-size:13px;}.header img.logo {width:90px;}}
+    .page{min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;box-sizing:border-box;}
+    .inner{width:100%;max-width:760px;}
+    .header{text-align:center;margin-bottom:12px;}
+    .header img.logo{width:110px;display:block;margin:0 auto 8px;}
+    h1.title{margin:0 0 12px;font-size:22px;color:#222;text-align:center;font-weight:700;}
+    .lang-row{display:flex;align-items:center;gap:8px;margin:8px 0 18px;justify-content:flex-start;}
+    .lang-row .globe{font-size:18px;margin-right:6px;}
+    .lang-row label{font-weight:600;color:#222;display:flex;align-items:center;gap:8px;}
+    .card{background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
+    .form-group{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+    .form-group label{width:160px;font-weight:600;color:#333;}
+    .form-group input,.form-group select{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #d9d9d9;font-size:14px;background:white;box-sizing:border-box;}
+    .star{color:#d93025;margin-left:6px;}
+    .section{margin-top:18px;}
+    #familyMembers{margin-top:6px;}
+    .member{background:#fbfbfb;border:1px solid #ececec;border-radius:10px;padding:12px;margin-bottom:12px;position:relative;}
+    .member .removeBtn{background:var(--danger);color:white;border:none;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:12px;width:50%;display:inline-block;}
+    .btn{width:100%;padding:12px;border-radius:9px;border:none;font-weight:700;cursor:pointer;font-size:15px;}
+    .btn-primary{background:var(--accent);color:white;}
+    .btn-add{background:#0b79d0;color:white;margin-top:6px;}
+    #toastMessage{position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:10px;font-weight:700;color:#fff;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);cursor:pointer;}
+    @media (max-width:520px){.form-group label{width:120px;font-size:13px;}.header img.logo{width:90px;}}
   </style>
 </head>
 <body>
@@ -42,7 +42,7 @@
     <div class="inner">
       <div class="header">
         <img class="logo" src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="logo">
-        <h1 class="title">Registration for Imamat Day Celebration</h1>
+        <h1 class="title" id="formTitle">Registration for Imamat Day Celebration</h1>
       </div>
 
       <div class="lang-row">
@@ -57,9 +57,9 @@
 
       <div class="card">
         <form id="regForm">
-          <div class="form-group"><label for="name">Name <span class="star">*</span></label><input id="name" type="text" required /></div>
-          <div class="form-group"><label for="lastname">Lastname <span class="star">*</span></label><input id="lastname" type="text" required /></div>
-          <div class="form-group"><label for="gender">Gender <span class="star">*</span></label>
+          <div class="form-group"><label for="name" id="labelName">Name <span class="star">*</span></label><input id="name" type="text" required /></div>
+          <div class="form-group"><label for="lastname" id="labelLastname">Lastname <span class="star">*</span></label><input id="lastname" type="text" required /></div>
+          <div class="form-group"><label for="gender" id="labelGender">Gender <span class="star">*</span></label>
             <select id="gender" required>
               <option value="">Select</option>
               <option value="Male">Male</option>
@@ -67,10 +67,10 @@
               <option value="Other">Other</option>
             </select>
           </div>
-          <div class="form-group"><label for="phone">Phone <span class="star">*</span></label><input id="phone" type="text" required /></div>
-          <div class="form-group"><label for="email">Email <span class="star">*</span></label><input id="email" type="email" required /></div>
-          <div class="form-group"><label for="dob">Date of Birth <span class="star">*</span></label><input id="dob" type="date" required /></div>
-          <div class="form-group"><label for="age">Age</label><input id="age" type="text" readonly /></div>
+          <div class="form-group"><label for="phone" id="labelPhone">Phone <span class="star">*</span></label><input id="phone" type="text" required /></div>
+          <div class="form-group"><label for="email" id="labelEmail">Email <span class="star">*</span></label><input id="email" type="email" required /></div>
+          <div class="form-group"><label for="dob" id="labelDob">Date of Birth <span class="star">*</span></label><input id="dob" type="date" required /></div>
+          <div class="form-group"><label for="age" id="labelAge">Age</label><input id="age" type="text" readonly /></div>
 
           <div class="section">
             <h3 id="familyTitle" style="margin:0;font-size:16px;">Family Members</h3>
@@ -90,121 +90,81 @@
     const sheetURL="https://sheetdb.io/api/v1/095eetx6hrw1i";
 
     const translations={
-      en:{title:"Registration for Imamat Day Celebration",name:"Name",lastname:"Lastname",gender:"Gender",phone:"Phone",email:"Email",dob:"Date of Birth",age:"Age",addMember:"+ Add Family Member",register:"Register",family:"Family Members",select:"Select",relationOptions:["Wife","Husband","Son","Daughter","Brother","Sister","Father","Mother","Other"],mainRelationSingle:"Single"},
-      de:{title:"Anmeldung zur Imamat-Tag Feier",name:"Vorname",lastname:"Nachname",gender:"Geschlecht",phone:"Telefon",email:"E-Mail",dob:"Geburtsdatum",age:"Alter",addMember:"+ Familienmitglied hinzufügen",register:"Registrieren",family:"Familienmitglieder",select:"Auswählen",relationOptions:["Ehefrau","Ehemann","Sohn","Tochter","Bruder","Schwester","Vater","Mutter","Andere"],mainRelationSingle:"Single"},
-      fa:{title:"ثبت نام برای جشن روز امامت",name:"نام",lastname:"نام خانوادگی",gender:"جنسیت",phone:"تلفن",email:"ایمیل",dob:"تاریخ تولد",age:"سن",addMember:"+ افزودن عضو خانواده",register:"ثبت نام",family:"اعضای خانواده",select:"انتخاب کنید",relationOptions:["همسر","شوهر","پسر","دختر","برادر","خواهر","پدر","مادر","سایر"],mainRelationSingle:"Single"}
+      en:{title:"Registration for Imamat Day Celebration",name:"Name",lastname:"Lastname",gender:"Gender",phone:"Phone",email:"Email",dob:"Date of Birth",age:"Age",add:"+ Add Family Member",register:"Register",family:"Family Members",select:"Select",relation:"Relation",remove:"Remove",relations:["Wife","Husband","Son","Daughter","Brother","Sister","Father","Mother","Other"]},
+      de:{title:"Anmeldung zur Imamat-Tag Feier",name:"Vorname",lastname:"Nachname",gender:"Geschlecht",phone:"Telefon",email:"E-Mail",dob:"Geburtsdatum",age:"Alter",add:"+ Familienmitglied hinzufügen",register:"Registrieren",family:"Familienmitglieder",select:"Auswählen",relation:"Beziehung",remove:"Entfernen",relations:["Ehefrau","Ehemann","Sohn","Tochter","Bruder","Schwester","Vater","Mutter","Andere"]},
+      fa:{title:"ثبت نام برای جشن روز امامت",name:"نام",lastname:"نام خانوادگی",gender:"جنسیت",phone:"تلفن",email:"ایمیل",dob:"تاریخ تولد",age:"سن",add:"+ افزودن عضو خانواده",register:"ثبت نام",family:"اعضای خانواده",select:"انتخاب کنید",relation:"نسبت",remove:"حذف",relations:["همسر","شوهر","پسر","دختر","برادر","خواهر","پدر","مادر","سایر"]}
     };
 
     const langSelect=document.getElementById("langSelect");
-    const titleEl=document.querySelector(".title");
-    const addFamilyBtn=document.getElementById("addFamilyBtn");
-    const registerBtn=document.getElementById("registerBtn");
-    const familyTitle=document.getElementById("familyTitle");
-    const labels={
-      name:document.querySelector('label[for="name"]'),
-      lastname:document.querySelector('label[for="lastname"]'),
-      gender:document.querySelector('label[for="gender"]'),
-      phone:document.querySelector('label[for="phone"]'),
-      email:document.querySelector('label[for="email"]'),
-      dob:document.querySelector('label[for="dob"]'),
-      age:document.querySelector('label[for="age"]')
+    const tEls={
+      title:document.getElementById("formTitle"),
+      name:document.getElementById("labelName"),
+      lastname:document.getElementById("labelLastname"),
+      gender:document.getElementById("labelGender"),
+      phone:document.getElementById("labelPhone"),
+      email:document.getElementById("labelEmail"),
+      dob:document.getElementById("labelDob"),
+      age:document.getElementById("labelAge"),
+      addBtn:document.getElementById("addFamilyBtn"),
+      regBtn:document.getElementById("registerBtn"),
+      famTitle:document.getElementById("familyTitle")
     };
-    const familyMembers=document.getElementById("familyMembers");
-    const mainDob=document.getElementById("dob");
-    const mainAge=document.getElementById("age");
-    const toastEl=document.getElementById("toastMessage");
 
-    function showToast(text,color='var(--danger)',timeout=3000){
-      toastEl.textContent=text;toastEl.style.background=color;toastEl.style.display='block';
-      setTimeout(()=>toastEl.style.display='none',timeout);
+    function setLang(l){
+      const t=translations[l]||translations.en;
+      tEls.title.textContent=t.title;
+      tEls.name.childNodes[0].nodeValue=t.name+" ";
+      tEls.lastname.childNodes[0].nodeValue=t.lastname+" ";
+      tEls.gender.childNodes[0].nodeValue=t.gender+" ";
+      tEls.phone.childNodes[0].nodeValue=t.phone+" ";
+      tEls.email.childNodes[0].nodeValue=t.email+" ";
+      tEls.dob.childNodes[0].nodeValue=t.dob+" ";
+      tEls.age.childNodes[0].nodeValue=t.age+" ";
+      tEls.addBtn.textContent=t.add;
+      tEls.regBtn.textContent=t.register;
+      tEls.famTitle.textContent=t.family;
+      // update existing family members if any
+      document.querySelectorAll(".member").forEach(m=>{
+        m.querySelector('label[data-key="m-name"]').childNodes[0].nodeValue=t.name+" ";
+        m.querySelector('label[data-key="m-last"]').childNodes[0].nodeValue=t.lastname+" ";
+        m.querySelector('label[data-key="m-relation"]').childNodes[0].nodeValue=t.relation+" ";
+        m.querySelector('label[data-key="m-gender"]').childNodes[0].nodeValue=t.gender+" ";
+        m.querySelector('label[data-key="m-dob"]').childNodes[0].nodeValue=t.dob+" ";
+        m.querySelector('label[data-key="m-age"]').childNodes[0].nodeValue=t.age+" ";
+        m.querySelector(".removeBtn").textContent=t.remove;
+      });
     }
-    function calcAgeFromDateString(dateStr){
-      if(!dateStr)return "";
-      const dob=new Date(dateStr);
-      if(isNaN(dob))return "";
-      const today=new Date();let age=today.getFullYear()-dob.getFullYear();
-      const m=today.getMonth()-dob.getMonth();
-      if(m<0||(m===0&&today.getDate()<dob.getDate()))age--;
-      return age>=0?String(age):"";
-    }
-    mainDob.addEventListener("change",()=>{mainAge.value=calcAgeFromDateString(mainDob.value);});
 
-    // ✅ Language change logic
-    langSelect.addEventListener("change",()=>{
-      const t=translations[langSelect.value]||translations.en;
-      titleEl.textContent=t.title;
-      labels.name.childNodes[0].nodeValue=t.name+" ";
-      labels.lastname.childNodes[0].nodeValue=t.lastname+" ";
-      labels.gender.childNodes[0].nodeValue=t.gender+" ";
-      labels.phone.childNodes[0].nodeValue=t.phone+" ";
-      labels.email.childNodes[0].nodeValue=t.email+" ";
-      labels.dob.childNodes[0].nodeValue=t.dob+" ";
-      labels.age.childNodes[0].nodeValue=t.age+" ";
-      addFamilyBtn.textContent=t.addMember;
-      registerBtn.textContent=t.register;
-      familyTitle.textContent=t.family;
+    langSelect.addEventListener("change",()=>setLang(langSelect.value));
+
+    document.getElementById("dob").addEventListener("change",e=>{
+      const d=new Date(e.target.value);if(!isNaN(d)){const t=new Date();let a=t.getFullYear()-d.getFullYear();if(t.getMonth()<d.getMonth()||(t.getMonth()==d.getMonth()&&t.getDate()<d.getDate()))a--;document.getElementById("age").value=a;}
     });
 
-    // initialize language
-    langSelect.dispatchEvent(new Event("change"));
-
     document.getElementById("addFamilyBtn").addEventListener("click",()=>{
-      const lang=langSelect.value||"en";
-      const t=translations[lang]||translations.en;
+      const t=translations[langSelect.value]||translations.en;
       const div=document.createElement("div");
       div.className="member";
       div.innerHTML=`
-        <div class="form-group"><label>Name <span class="star">*</span></label><input type="text" data-key="m-name-input" required></div>
-        <div class="form-group"><label>Lastname <span class="star">*</span></label><input type="text" data-key="m-last-input" required></div>
-        <div class="form-group"><label>Relation <span class="star">*</span></label>
-          <select data-key="m-relation-select" required>
-            <option value="">${t.select}</option>
-            ${t.relationOptions.map(r=>`<option value="${r}">${r}</option>`).join("")}
-          </select>
+        <div class="form-group"><label data-key="m-name">${t.name} <span class="star">*</span></label><input type="text" required></div>
+        <div class="form-group"><label data-key="m-last">${t.lastname} <span class="star">*</span></label><input type="text" required></div>
+        <div class="form-group"><label data-key="m-relation">${t.relation} <span class="star">*</span></label>
+          <select required><option value="">${t.select}</option>${t.relations.map(r=>`<option value="${r}">${r}</option>`).join("")}</select>
         </div>
-        <div class="form-group"><label>Gender <span class="star">*</span></label>
-          <select data-key="m-gender-select" required>
-            <option value="">${t.select}</option>
-            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
-          </select>
+        <div class="form-group"><label data-key="m-gender">${t.gender} <span class="star">*</span></label>
+          <select required><option value="">${t.select}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
         </div>
-        <div class="form-group"><label>Date of Birth <span class="star">*</span></label><input type="date" data-key="m-dob-input" required></div>
-        <div class="form-group"><label>Age</label><input type="text" data-key="m-age-input" readonly></div>
-        <button type="button" class="removeBtn">Remove</button>`;
+        <div class="form-group"><label data-key="m-dob">${t.dob} <span class="star">*</span></label><input type="date" required></div>
+        <div class="form-group"><label data-key="m-age">${t.age}</label><input type="text" readonly></div>
+        <button type="button" class="removeBtn">${t.remove}</button>`;
       div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
-      const dob=div.querySelector('input[data-key="m-dob-input"]');
-      const age=div.querySelector('input[data-key="m-age-input"]');
-      dob.addEventListener("change",()=>{age.value=calcAgeFromDateString(dob.value);});
-      familyMembers.appendChild(div);
+      const dob=div.querySelector('input[type="date"]');const age=div.querySelector('input[readonly]');
+      dob.addEventListener("change",()=>{const d=new Date(dob.value);if(!isNaN(d)){const t=new Date();let a=t.getFullYear()-d.getFullYear();if(t.getMonth()<d.getMonth()||(t.getMonth()==d.getMonth()&&t.getDate()<d.getDate()))a--;age.value=a;}});
+      document.getElementById("familyMembers").appendChild(div);
     });
 
-    document.getElementById("regForm").addEventListener("submit",async function(e){
-      e.preventDefault();
-      const mainName=name.value.trim(),mainLastname=lastname.value.trim(),mainGender=gender.value,mainPhone=phone.value.trim(),mainEmail=email.value.trim(),mainDOB=dob.value.trim(),mainAgeVal=age.value.trim();
-      if(!mainName||!mainLastname||!mainDOB){showToast("Please fill required fields");return;}
-      const persons=[];
-      persons.push({name:mainName,Lastname:mainLastname,gender:mainGender||'',Phone:mainPhone||'',Email:mainEmail||'',DateOfBirth:mainDOB,Age:mainAgeVal||'',Relation:"Family Admin"});
-      document.querySelectorAll(".member").forEach(m=>{
-        const mName=m.querySelector('input[data-key="m-name-input"]').value.trim();
-        const mLast=m.querySelector('input[data-key="m-last-input"]').value.trim();
-        const mRel=m.querySelector('select[data-key="m-relation-select"]').value.trim();
-        const mGen=m.querySelector('select[data-key="m-gender-select"]').value.trim();
-        const mDOB=m.querySelector('input[data-key="m-dob-input"]').value.trim();
-        const mAge=m.querySelector('input[data-key="m-age-input"]').value.trim();
-        if(mName&&mLast&&mDOB&&mRel){persons.push({name:mName,Lastname:mLast,gender:mGen,Phone:'',Email:'',DateOfBirth:mDOB,Age:mAge,Relation:mRel});}
-      });
-      try{
-        for(const p of persons){
-          const checkURL=`${sheetURL}/search?name=${encodeURIComponent(p.name)}&Lastname=${encodeURIComponent(p.Lastname)}&DateOfBirth=${encodeURIComponent(p.DateOfBirth)}`;
-          const res=await fetch(checkURL);const data=await res.json();
-          if(Array.isArray(data)&&data.length>0){showToast(\`STOP: You have already registered — \${p.name} \${p.Lastname}\`);return;}
-        }
-        const payload={data:persons};
-        const saveRes=await fetch(sheetURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        if(saveRes.ok){showToast("✅ Registration submitted successfully!","var(--success)",3500);e.target.reset();mainAge.value='';familyMembers.innerHTML='';}
-        else showToast("Error submitting form");
-      }catch(err){console.error(err);showToast("Network error");}
-    });
+    // Initialize default language
+    setLang("en");
   </script>
 </body>
 </html>
