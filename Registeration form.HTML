@@ -12,29 +12,35 @@
       --danger: #dc3545;
       --success: #28a745;
     }
-    html,body{height:100%;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background: url("https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/background.jpg") center / 600px repeat fixed;}
-    .page{min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;box-sizing:border-box;}
-    .inner{width:100%;max-width:760px;}
-    .header{text-align:center;margin-bottom:12px;}
-    .header img.logo{width:110px;display:block;margin:0 auto 8px;}
-    h1.title{margin:0 0 12px;font-size:22px;color:#222;text-align:center;font-weight:700;}
-    .lang-row{display:flex;align-items:center;gap:8px;margin:8px 0 18px;justify-content:flex-start;}
-    .lang-row .globe{font-size:18px;margin-right:6px;}
-    .lang-row label{font-weight:600;color:#222;display:flex;align-items:center;gap:8px;}
-    .card{background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
-    .form-group{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-    .form-group label{width:160px;font-weight:600;color:#333;}
-    .form-group input,.form-group select{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #d9d9d9;font-size:14px;background:white;box-sizing:border-box;}
-    .star{color:#d93025;margin-left:6px;}
-    .section{margin-top:18px;}
-    #familyMembers{margin-top:6px;}
-    .member{background:#fbfbfb;border:1px solid #ececec;border-radius:10px;padding:12px;margin-bottom:12px;position:relative;}
-    .member .removeBtn{background:var(--danger);color:white;border:none;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:12px;width:50%;display:inline-block;}
-    .btn{width:100%;padding:12px;border-radius:9px;border:none;font-weight:700;cursor:pointer;font-size:15px;}
-    .btn-primary{background:var(--accent);color:white;}
-    .btn-add{background:#0b79d0;color:white;margin-top:6px;}
-    #toastMessage{position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:10px;font-weight:700;color:#fff;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);cursor:pointer;}
-    @media (max-width:520px){.form-group label{width:120px;font-size:13px;}.header img.logo{width:90px;}}
+    html,body{height:100%;margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f4f6f9;}
+    .page {
+      min-height:100%;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:28px 16px;
+      box-sizing:border-box;
+    }
+    .inner {width:100%;max-width:760px;}
+    .header {text-align:center;margin-bottom:12px;}
+    .header img.logo {width:110px;display:block;margin:0 auto 8px;}
+    h1.title {margin:0 0 12px;font-size:22px;color:#222;text-align:center;font-weight:700;}
+    .lang-row {display:flex;align-items:center;gap:8px;margin:8px 0 18px;justify-content:flex-start;}
+    .lang-row .globe {font-size:18px;margin-right:6px;}
+    .lang-row label {font-weight:600;color:#222;display:flex;align-items:center;gap:8px;}
+    .card {background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 8px 28px rgba(15,20,25,0.08);border:1px solid rgba(0,0,0,0.04);}
+    .form-group {display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+    .form-group label {width:160px;font-weight:600;color:#333;}
+    .form-group input,.form-group select {flex:1;padding:10px 12px;border-radius:8px;border:1px solid #d9d9d9;font-size:14px;background:white;box-sizing:border-box;}
+    .star {color:#d93025;margin-left:6px;}
+    .section {margin-top:18px;}
+    #familyMembers {margin-top:6px;}
+    .member {background:#fbfbfb;border:1px solid #ececec;border-radius:10px;padding:12px;margin-bottom:12px;}
+    .member .removeBtn {background:var(--danger);color:white;border:none;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;width:50%;display:inline-block;}
+    .btn {width:100%;padding:12px;border-radius:9px;border:none;font-weight:700;cursor:pointer;font-size:15px;}
+    .btn-primary {background:var(--accent);color:white;}
+    .btn-add {background:#0b79d0;color:white;margin-top:6px;}
+    #toastMessage {position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:10px;font-weight:700;color:#fff;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.12);}
   </style>
 </head>
 <body>
@@ -48,7 +54,7 @@
       <div class="lang-row">
         <span class="globe">🌐</span>
         <label for="langSelect">Language:</label>
-        <select id="langSelect" aria-label="Language select" style="width:150px;padding:8px;border-radius:8px;border:1px solid #d9d9d9;">
+        <select id="langSelect" style="width:150px; padding:8px; border-radius:8px; border:1px solid #d9d9d9;">
           <option value="en">English</option>
           <option value="de">Deutsch</option>
           <option value="fa">فارسی</option>
@@ -57,9 +63,9 @@
 
       <div class="card">
         <form id="regForm">
-          <div class="form-group"><label for="name" id="labelName">Name <span class="star">*</span></label><input id="name" type="text" required /></div>
-          <div class="form-group"><label for="lastname" id="labelLastname">Lastname <span class="star">*</span></label><input id="lastname" type="text" required /></div>
-          <div class="form-group"><label for="gender" id="labelGender">Gender <span class="star">*</span></label>
+          <div class="form-group"><label for="name" id="lblName">Name <span class="star">*</span></label><input id="name" type="text" required></div>
+          <div class="form-group"><label for="lastname" id="lblLast">Lastname <span class="star">*</span></label><input id="lastname" type="text" required></div>
+          <div class="form-group"><label for="gender" id="lblGender">Gender <span class="star">*</span></label>
             <select id="gender" required>
               <option value="">Select</option>
               <option value="Male">Male</option>
@@ -67,13 +73,13 @@
               <option value="Other">Other</option>
             </select>
           </div>
-          <div class="form-group"><label for="phone" id="labelPhone">Phone <span class="star">*</span></label><input id="phone" type="text" required /></div>
-          <div class="form-group"><label for="email" id="labelEmail">Email <span class="star">*</span></label><input id="email" type="email" required /></div>
-          <div class="form-group"><label for="dob" id="labelDob">Date of Birth <span class="star">*</span></label><input id="dob" type="date" required /></div>
-          <div class="form-group"><label for="age" id="labelAge">Age</label><input id="age" type="text" readonly /></div>
+          <div class="form-group"><label for="phone" id="lblPhone">Phone <span class="star">*</span></label><input id="phone" type="text" required></div>
+          <div class="form-group"><label for="email" id="lblEmail">Email <span class="star">*</span></label><input id="email" type="email" required></div>
+          <div class="form-group"><label for="dob" id="lblDob">Date of Birth <span class="star">*</span></label><input id="dob" type="date" required></div>
+          <div class="form-group"><label for="age" id="lblAge">Age</label><input id="age" type="text" readonly></div>
 
           <div class="section">
-            <h3 id="familyTitle" style="margin:0;font-size:16px;">Family Members</h3>
+            <h3 id="familyTitle" style="margin:0; font-size:16px;">Family Members</h3>
             <div id="familyMembers"></div>
             <button type="button" id="addFamilyBtn" class="btn btn-add">+ Add Family Member</button>
           </div>
@@ -87,84 +93,138 @@
   <div id="toastMessage"></div>
 
   <script>
-    const sheetURL="https://sheetdb.io/api/v1/095eetx6hrw1i";
+    const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    const translations={
-      en:{title:"Registration for Imamat Day Celebration",name:"Name",lastname:"Lastname",gender:"Gender",phone:"Phone",email:"Email",dob:"Date of Birth",age:"Age",add:"+ Add Family Member",register:"Register",family:"Family Members",select:"Select",relation:"Relation",remove:"Remove",relations:["Wife","Husband","Son","Daughter","Brother","Sister","Father","Mother","Other"]},
-      de:{title:"Anmeldung zur Imamat-Tag Feier",name:"Vorname",lastname:"Nachname",gender:"Geschlecht",phone:"Telefon",email:"E-Mail",dob:"Geburtsdatum",age:"Alter",add:"+ Familienmitglied hinzufügen",register:"Registrieren",family:"Familienmitglieder",select:"Auswählen",relation:"Beziehung",remove:"Entfernen",relations:["Ehefrau","Ehemann","Sohn","Tochter","Bruder","Schwester","Vater","Mutter","Andere"]},
-      fa:{title:"ثبت نام برای جشن روز امامت",name:"نام",lastname:"نام خانوادگی",gender:"جنسیت",phone:"تلفن",email:"ایمیل",dob:"تاریخ تولد",age:"سن",add:"+ افزودن عضو خانواده",register:"ثبت نام",family:"اعضای خانواده",select:"انتخاب کنید",relation:"نسبت",remove:"حذف",relations:["همسر","شوهر","پسر","دختر","برادر","خواهر","پدر","مادر","سایر"]}
+    const translations = {
+      en: {title:"Registration for Imamat Day Celebration",name:"Name",lastname:"Lastname",gender:"Gender",phone:"Phone",email:"Email",dob:"Date of Birth",age:"Age",add:"+ Add Family Member",register:"Register",family:"Family Members",select:"Select",remove:"Remove",msgSuccess:"✅ Registration submitted successfully!",msgDuplicate:"STOP: You have already registered —",msgError:"Error submitting form"},
+      de: {title:"Anmeldung zur Imamat-Tag Feier",name:"Vorname",lastname:"Nachname",gender:"Geschlecht",phone:"Telefon",email:"E-Mail",dob:"Geburtsdatum",age:"Alter",add:"+ Familienmitglied hinzufügen",register:"Registrieren",family:"Familienmitglieder",select:"Auswählen",remove:"Entfernen",msgSuccess:"✅ Registrierung erfolgreich eingereicht!",msgDuplicate:"STOP: Sie haben sich bereits registriert —",msgError:"Fehler beim Senden des Formulars"},
+      fa: {title:"ثبت نام برای جشن روز امامت",name:"نام",lastname:"نام خانوادگی",gender:"جنسیت",phone:"تلفن",email:"ایمیل",dob:"تاریخ تولد",age:"سن",add:"+ افزودن عضو خانواده",register:"ثبت نام",family:"اعضای خانواده",select:"انتخاب کنید",remove:"حذف",msgSuccess:"✅ ثبت‌نام با موفقیت ارسال شد!",msgDuplicate:"توقف: شما قبلاً ثبت نام کرده‌اید —",msgError:"خطا در ارسال فرم"}
     };
 
+    const els = {
+      name: document.getElementById("lblName"),
+      lastname: document.getElementById("lblLast"),
+      gender: document.getElementById("lblGender"),
+      phone: document.getElementById("lblPhone"),
+      email: document.getElementById("lblEmail"),
+      dob: document.getElementById("lblDob"),
+      age: document.getElementById("lblAge"),
+      add: document.getElementById("addFamilyBtn"),
+      register: document.getElementById("registerBtn"),
+      family: document.getElementById("familyTitle"),
+      title: document.getElementById("formTitle")
+    };
     const langSelect=document.getElementById("langSelect");
-    const tEls={
-      title:document.getElementById("formTitle"),
-      name:document.getElementById("labelName"),
-      lastname:document.getElementById("labelLastname"),
-      gender:document.getElementById("labelGender"),
-      phone:document.getElementById("labelPhone"),
-      email:document.getElementById("labelEmail"),
-      dob:document.getElementById("labelDob"),
-      age:document.getElementById("labelAge"),
-      addBtn:document.getElementById("addFamilyBtn"),
-      regBtn:document.getElementById("registerBtn"),
-      famTitle:document.getElementById("familyTitle")
-    };
+    const familyMembers=document.getElementById("familyMembers");
+    const toastEl=document.getElementById("toastMessage");
+    const mainDob=document.getElementById("dob");
+    const mainAge=document.getElementById("age");
 
-    function setLang(l){
-      const t=translations[l]||translations.en;
-      tEls.title.textContent=t.title;
-      tEls.name.childNodes[0].nodeValue=t.name+" ";
-      tEls.lastname.childNodes[0].nodeValue=t.lastname+" ";
-      tEls.gender.childNodes[0].nodeValue=t.gender+" ";
-      tEls.phone.childNodes[0].nodeValue=t.phone+" ";
-      tEls.email.childNodes[0].nodeValue=t.email+" ";
-      tEls.dob.childNodes[0].nodeValue=t.dob+" ";
-      tEls.age.childNodes[0].nodeValue=t.age+" ";
-      tEls.addBtn.textContent=t.add;
-      tEls.regBtn.textContent=t.register;
-      tEls.famTitle.textContent=t.family;
-      // update existing family members if any
-      document.querySelectorAll(".member").forEach(m=>{
-        m.querySelector('label[data-key="m-name"]').childNodes[0].nodeValue=t.name+" ";
-        m.querySelector('label[data-key="m-last"]').childNodes[0].nodeValue=t.lastname+" ";
-        m.querySelector('label[data-key="m-relation"]').childNodes[0].nodeValue=t.relation+" ";
-        m.querySelector('label[data-key="m-gender"]').childNodes[0].nodeValue=t.gender+" ";
-        m.querySelector('label[data-key="m-dob"]').childNodes[0].nodeValue=t.dob+" ";
-        m.querySelector('label[data-key="m-age"]').childNodes[0].nodeValue=t.age+" ";
-        m.querySelector(".removeBtn").textContent=t.remove;
-      });
+    function showToast(text,color='var(--danger)',timeout=3000){
+      toastEl.textContent=text;toastEl.style.background=color;toastEl.style.display='block';
+      setTimeout(()=>toastEl.style.display='none',timeout);
     }
 
-    langSelect.addEventListener("change",()=>setLang(langSelect.value));
+    function calcAge(d){if(!d)return"";const dd=new Date(d);if(isNaN(dd))return"";const t=new Date();let a=t.getFullYear()-dd.getFullYear();const m=t.getMonth()-dd.getMonth();if(m<0||(m===0&&t.getDate()<dd.getDate()))a--;return a;}
+    mainDob.addEventListener("change",()=>{mainAge.value=calcAge(mainDob.value);});
 
-    document.getElementById("dob").addEventListener("change",e=>{
-      const d=new Date(e.target.value);if(!isNaN(d)){const t=new Date();let a=t.getFullYear()-d.getFullYear();if(t.getMonth()<d.getMonth()||(t.getMonth()==d.getMonth()&&t.getDate()<d.getDate()))a--;document.getElementById("age").value=a;}
+    // Language switch
+    langSelect.addEventListener("change",()=>{
+      const lang=translations[langSelect.value]||translations.en;
+      els.title.textContent=lang.title;
+      els.name.innerHTML=lang.name+' <span class="star">*</span>';
+      els.lastname.innerHTML=lang.lastname+' <span class="star">*</span>';
+      els.gender.innerHTML=lang.gender+' <span class="star">*</span>';
+      els.phone.innerHTML=lang.phone+' <span class="star">*</span>';
+      els.email.innerHTML=lang.email+' <span class="star">*</span>';
+      els.dob.innerHTML=lang.dob+' <span class="star">*</span>';
+      els.age.textContent=lang.age;
+      els.add.textContent=lang.add;
+      els.register.textContent=lang.register;
+      els.family.textContent=lang.family;
+      document.querySelectorAll('.member').forEach(m=>{
+        m.querySelector('[data-key="m-name"]').innerHTML=lang.name+' <span class="star">*</span>';
+        m.querySelector('[data-key="m-last"]').innerHTML=lang.lastname+' <span class="star">*</span>';
+        m.querySelector('[data-key="m-relation"]').innerHTML='Relation <span class="star">*</span>';
+        m.querySelector('[data-key="m-gender"]').innerHTML=lang.gender+' <span class="star">*</span>';
+        m.querySelector('[data-key="m-dob"]').innerHTML=lang.dob+' <span class="star">*</span>';
+        m.querySelector('[data-key="m-age"]').textContent=lang.age;
+        m.querySelector('.removeBtn').textContent=lang.remove;
+      });
     });
 
+    // Add family
     document.getElementById("addFamilyBtn").addEventListener("click",()=>{
-      const t=translations[langSelect.value]||translations.en;
+      const lang=translations[langSelect.value]||translations.en;
       const div=document.createElement("div");
       div.className="member";
       div.innerHTML=`
-        <div class="form-group"><label data-key="m-name">${t.name} <span class="star">*</span></label><input type="text" required></div>
-        <div class="form-group"><label data-key="m-last">${t.lastname} <span class="star">*</span></label><input type="text" required></div>
-        <div class="form-group"><label data-key="m-relation">${t.relation} <span class="star">*</span></label>
-          <select required><option value="">${t.select}</option>${t.relations.map(r=>`<option value="${r}">${r}</option>`).join("")}</select>
+        <div class="form-group"><label data-key="m-name">${lang.name} <span class="star">*</span></label><input type="text" data-key="m-name-input" required></div>
+        <div class="form-group"><label data-key="m-last">${lang.lastname} <span class="star">*</span></label><input type="text" data-key="m-last-input" required></div>
+        <div class="form-group"><label data-key="m-relation">Relation <span class="star">*</span></label>
+          <select data-key="m-relation-select" required>
+            <option value="">${lang.select}</option>
+            <option value="Wife">Wife</option><option value="Husband">Husband</option><option value="Son">Son</option>
+            <option value="Daughter">Daughter</option><option value="Brother">Brother</option><option value="Sister">Sister</option>
+            <option value="Father">Father</option><option value="Mother">Mother</option><option value="Other">Other</option>
+          </select>
         </div>
-        <div class="form-group"><label data-key="m-gender">${t.gender} <span class="star">*</span></label>
-          <select required><option value="">${t.select}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+        <div class="form-group"><label data-key="m-gender">${lang.gender} <span class="star">*</span></label>
+          <select data-key="m-gender-select" required>
+            <option value="">${lang.select}</option>
+            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+          </select>
         </div>
-        <div class="form-group"><label data-key="m-dob">${t.dob} <span class="star">*</span></label><input type="date" required></div>
-        <div class="form-group"><label data-key="m-age">${t.age}</label><input type="text" readonly></div>
-        <button type="button" class="removeBtn">${t.remove}</button>`;
+        <div class="form-group"><label data-key="m-dob">${lang.dob} <span class="star">*</span></label><input type="date" data-key="m-dob-input" required></div>
+        <div class="form-group"><label data-key="m-age">${lang.age}</label><input type="text" data-key="m-age-input" readonly></div>
+        <button type="button" class="removeBtn">${lang.remove}</button>
+      `;
       div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
-      const dob=div.querySelector('input[type="date"]');const age=div.querySelector('input[readonly]');
-      dob.addEventListener("change",()=>{const d=new Date(dob.value);if(!isNaN(d)){const t=new Date();let a=t.getFullYear()-d.getFullYear();if(t.getMonth()<d.getMonth()||(t.getMonth()==d.getMonth()&&t.getDate()<d.getDate()))a--;age.value=a;}});
-      document.getElementById("familyMembers").appendChild(div);
+      const dob=div.querySelector('[data-key="m-dob-input"]');
+      const age=div.querySelector('[data-key="m-age-input"]');
+      dob.addEventListener("change",()=>{age.value=calcAge(dob.value);});
+      familyMembers.appendChild(div);
     });
 
-    // Initialize default language
-    setLang("en");
+    // Submit handler
+    document.getElementById("regForm").addEventListener("submit",async function(e){
+      e.preventDefault();
+      const lang=translations[langSelect.value]||translations.en;
+      const mainName=document.getElementById("name").value.trim();
+      const mainLastname=document.getElementById("lastname").value.trim();
+      const mainGender=document.getElementById("gender").value;
+      const mainPhone=document.getElementById("phone").value.trim();
+      const mainEmail=document.getElementById("email").value.trim();
+      const mainDOB=document.getElementById("dob").value.trim();
+      const mainAgeVal=document.getElementById("age").value.trim();
+
+      if(!mainName||!mainLastname||!mainDOB){showToast(lang.msgError);return;}
+
+      const persons=[];
+      persons.push({name:mainName,Lastname:mainLastname,gender:mainGender,Phone:mainPhone,Email:mainEmail,DateOfBirth:mainDOB,Age:mainAgeVal,Relation:"Family Admin"});
+      document.querySelectorAll(".member").forEach(m=>{
+        const n=m.querySelector('[data-key="m-name-input"]').value.trim();
+        const l=m.querySelector('[data-key="m-last-input"]').value.trim();
+        const r=m.querySelector('[data-key="m-relation-select"]').value.trim();
+        const g=m.querySelector('[data-key="m-gender-select"]').value.trim();
+        const d=m.querySelector('[data-key="m-dob-input"]').value.trim();
+        const a=m.querySelector('[data-key="m-age-input"]').value.trim();
+        if(n&&l&&d&&r) persons.push({name:n,Lastname:l,gender:g,Phone:'',Email:'',DateOfBirth:d,Age:a,Relation:r});
+      });
+
+      try{
+        for(const p of persons){
+          const checkURL=`${sheetURL}/search?name=${encodeURIComponent(p.name)}&Lastname=${encodeURIComponent(p.Lastname)}&DateOfBirth=${encodeURIComponent(p.DateOfBirth)}`;
+          const res=await fetch(checkURL);
+          const data=await res.json();
+          if(Array.isArray(data)&&data.length>0){showToast(`${lang.msgDuplicate} ${p.name} ${p.Lastname}`);return;}
+        }
+        const payload={data:persons};
+        const saveRes=await fetch(sheetURL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+        if(saveRes.ok){showToast(lang.msgSuccess,"var(--success)",3500);e.target.reset();familyMembers.innerHTML='';}
+        else showToast(lang.msgError);
+      }catch(err){console.error(err);showToast(lang.msgError);}
+    });
   </script>
 </body>
 </html>
