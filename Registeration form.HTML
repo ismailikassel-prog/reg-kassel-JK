@@ -108,9 +108,6 @@
       position:relative;
     }
     .member .removeBtn {
-      position:absolute;
-      right:10px;
-      top:10px;
       background:var(--danger);
       color:white;
       border:none;
@@ -160,12 +157,10 @@
   <div class="page">
     <div class="inner">
       <div class="header">
-        <!-- logo (centered) -->
         <img class="logo" src="https://github.com/ismailikassel-prog/reg-kassel-JK/raw/main/Ismaili%20logo.png" alt="logo">
         <h1 class="title">Registration for Imamat Day Celebration</h1>
       </div>
 
-      <!-- language + card -->
       <div class="lang-row" style="margin-bottom:8px;">
         <span class="globe">🌐</span>
         <label for="langSelect">Language:</label>
@@ -178,7 +173,6 @@
 
       <div class="card" role="region" aria-label="registration form">
         <form id="regForm">
-          <!-- main fields -->
           <div class="form-group">
             <label for="name">Name <span class="star">*</span></label>
             <input id="name" type="text" required />
@@ -219,7 +213,6 @@
             <input id="age" type="text" readonly />
           </div>
 
-          <!-- family members area -->
           <div class="section">
             <div style="display:flex; gap:12px; align-items:center; justify-content:space-between;">
               <h3 style="margin:0; font-size:16px;">Family Members</h3>
@@ -240,39 +233,17 @@
     </div>
   </div>
 
-  <!-- toast -->
   <div id="toastMessage" role="status" aria-live="polite"></div>
 
   <script>
-    // ---------- CONFIG ----------
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // Translations (labels/messages)
     const translations = {
-      en: {
-        title: "Registration for Imamat Day Celebration",
-        name: "Name", lastname: "Lastname", gender: "Gender", select: "Select",
-        phone: "Phone", email: "Email", dob: "Date of Birth", age: "Age",
-        addMember: "+ Add Family Member", register: "Register", remove: "Remove",
-        messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ Registration submitted successfully!" }
-      },
-      de: {
-        title: "Anmeldung zur Imamat-Tag Feier",
-        name: "Vorname", lastname: "Nachname", gender: "Geschlecht", select: "Wählen",
-        phone: "Telefon", email: "E-Mail", dob: "Geburtsdatum", age: "Alter",
-        addMember: "+ Familienmitglied hinzufügen", register: "Registrieren", remove: "Entfernen",
-        messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ Registrierung erfolgreich übermittelt!" }
-      },
-      fa: {
-        title: "ثبت نام جشن روز امامت",
-        name: "نام", lastname: "نام خانوادگی", gender: "جنسیت", select: "انتخاب کنید",
-        phone: "تلفن", email: "ایمیل", dob: "تاریخ تولد", age: "سن",
-        addMember: "+ افزودن عضو خانواده", register: "ثبت نام", remove: "حذف",
-        messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ ثبت نام با موفقیت ارسال شد!" }
-      }
+      en: { title: "Registration for Imamat Day Celebration", name: "Name", lastname: "Lastname", gender: "Gender", select: "Select", phone: "Phone", email: "Email", dob: "Date of Birth", age: "Age", addMember: "+ Add Family Member", register: "Register", remove: "Remove", messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ Registration submitted successfully!" } },
+      de: { title: "Anmeldung zur Imamat-Tag Feier", name: "Vorname", lastname: "Nachname", gender: "Geschlecht", select: "Wählen", phone: "Telefon", email: "E-Mail", dob: "Geburtsdatum", age: "Alter", addMember: "+ Familienmitglied hinzufügen", register: "Registrieren", remove: "Entfernen", messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ Registrierung erfolgreich übermittelt!" } },
+      fa: { title: "ثبت نام جشن روز امامت", name: "نام", lastname: "نام خانوادگی", gender: "جنسیت", select: "انتخاب کنید", phone: "تلفن", email: "ایمیل", dob: "تاریخ تولد", age: "سن", addMember: "+ افزودن عضو خانواده", register: "ثبت نام", remove: "حذف", messages: { duplicate: "STOP: You Have Already Registered", saved: "✅ ثبت نام با موفقیت ارسال شد!" } }
     };
 
-    // ---------- UTIL ----------
     function formatToDDMMMYYYY(dateInput) {
       if (!dateInput) return "";
       const d = new Date(dateInput);
@@ -293,40 +264,19 @@
       return age < 0 ? "" : age;
     }
 
-    // ---------- UI helpers ----------
     const toast = document.getElementById("toastMessage");
     function showToastMessage(msg, type = "success") {
       toast.textContent = msg;
       toast.style.backgroundColor = (type === "success") ? "#28a745" : "#dc3545";
       toast.style.display = "block";
-      // clickable to dismiss
       toast.onclick = () => { toast.style.display = "none"; };
     }
 
-    // ---------- Language / labels ----------
     const langSelect = document.getElementById("langSelect");
     function applyLanguage(lang) {
       const tr = translations[lang] || translations.en;
-      document.querySelector(".header img.logo"); // keep logo
-      document.querySelector(".title")?.textContent; // keep title visually same (we set title separately)
-      // Update visible texts where applicable
-      // Title
       document.querySelector(".title").textContent = tr.title;
-      // Update placeholders/labels in form groups (we update only elements that show text)
-      // Field labels are static HTML; update via innerText of their label nodes:
-      const labelMap = {
-        name: tr.name,
-        lastname: tr.lastname,
-        gender: tr.gender,
-        phone: tr.phone,
-        email: tr.email,
-        dob: tr.dob,
-        age: tr.age
-      };
-      // find labels by for attribute / text content scanning:
       document.querySelectorAll(".form-group label").forEach(lbl => {
-        const text = lbl.getAttribute("for") || lbl.textContent.trim();
-        // Try to detect which field it is by existing text
         const lblText = lbl.textContent.trim().toLowerCase();
         if (lblText.includes("name") || lblText.includes("نام")) lbl.innerHTML = `${tr.name} <span class="star">*</span>`;
         else if (lblText.includes("lastname") || lblText.includes("نام خانوادگی")) lbl.innerHTML = `${tr.lastname} <span class="star">*</span>`;
@@ -336,16 +286,12 @@
         else if (lblText.includes("date") || lblText.includes("تاریخ")) lbl.innerHTML = `${tr.dob} <span class="star">*</span>`;
         else if (lblText.includes("age") || lblText.includes("سن")) lbl.innerHTML = tr.age;
       });
-
-      // update add-family & register button text
       document.getElementById("addFamilyBtn").textContent = tr.addMember;
       document.getElementById("registerBtn").textContent = tr.register;
     }
-    // apply initial language
     applyLanguage(langSelect.value || "en");
     langSelect.addEventListener("change", ()=> applyLanguage(langSelect.value));
 
-    // ---------- Duplicate check ----------
     async function checkDuplicateByNameLastnameDob(name, lastname, formattedDob) {
       if (!name || !lastname || !formattedDob) return false;
       const url = `${sheetURL}/search?name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(formattedDob)}`;
@@ -356,11 +302,10 @@
         return Array.isArray(data) && data.length > 0;
       } catch (err) {
         console.error("Duplicate check error:", err);
-        return false; // don't block saving on network/search error
+        return false;
       }
     }
 
-    // ---------- Add Family Member ----------
     function addMember() {
       const lang = langSelect.value || "en";
       const tr = translations[lang] || translations.en;
@@ -393,35 +338,26 @@
         </div>
         <div class="form-group"><label>${tr.dob} <span class="star">*</span></label><input type="date" class="mdob" required></div>
         <div class="form-group"><label>${tr.age}</label><input type="text" class="mage" readonly></div>
-        <button type="button" class="removeBtn">${tr.remove}</button>
+        <div style="margin-top:6px;"><button type="button" class="removeBtn">${tr.remove}</button></div>
       `;
       const container = document.getElementById("familyMembers");
       container.appendChild(div);
 
-      // events for this member
-      const removeBtn = div.querySelector(".removeBtn");
-      removeBtn.addEventListener("click", () => div.remove());
-
-      const mdob = div.querySelector(".mdob");
-      const mage = div.querySelector(".mage");
-      mdob.addEventListener("change", function() {
-        mage.value = calculateAgeExact(this.value);
+      div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
+      div.querySelector(".mdob").addEventListener("change", function() {
+        div.querySelector(".mage").value = calculateAgeExact(this.value);
       });
     }
 
     document.getElementById("addFamilyBtn").addEventListener("click", addMember);
-
-    // ---------- Age binding for main DOB ----------
     document.getElementById("dob").addEventListener("change", function(){
       document.getElementById("age").value = calculateAgeExact(this.value);
     });
 
-    // ---------- SUBMIT ----------
     document.getElementById("regForm").addEventListener("submit", async function(e){
       e.preventDefault();
       const lang = langSelect.value || "en";
       const tr = translations[lang] || translations.en;
-
       const registerBtn = document.getElementById("registerBtn");
       registerBtn.disabled = true;
       registerBtn.textContent = tr.register + " ...";
@@ -433,7 +369,6 @@
         const dobRaw = document.getElementById("dob").value;
         const formattedDob = formatToDDMMMYYYY(dobRaw);
 
-        // simple validation
         if(!name || !lastname) {
           showToastMessage("Please enter name and lastname", "error");
           registerBtn.disabled = false;
@@ -441,7 +376,6 @@
           return;
         }
 
-        // duplicate check
         const isDup = await checkDuplicateByNameLastnameDob(name, lastname, formattedDob);
         if (isDup) {
           showToastMessage(tr.messages.duplicate, "error");
@@ -450,7 +384,6 @@
           return;
         }
 
-        // prepare main record — use exact sheet headers (note lowercase 'name')
         const mainData = {
           name: name,
           Lastname: lastname,
@@ -462,14 +395,12 @@
           Relation: "Family Admin"
         };
 
-        // post main record
         await fetch(sheetURL, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({ data: [ mainData ] })
         });
 
-        // post family members
         const members = Array.from(document.querySelectorAll(".member"));
         for (const m of members) {
           const mdobRaw = m.querySelector(".mdob").value;
@@ -478,7 +409,7 @@
           const memberGender = m.querySelector(".mgender").value;
           const memberRelation = m.querySelector(".mrelation").value || "";
 
-          if (!memberName || !memberLastname) continue; // skip incomplete
+          if (!memberName || !memberLastname) continue;
 
           const memberData = {
             name: memberName,
@@ -499,8 +430,6 @@
         }
 
         showToastMessage(tr.messages.saved, "success");
-
-        // reset form
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
