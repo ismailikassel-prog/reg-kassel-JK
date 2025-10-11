@@ -52,6 +52,17 @@
       text-align: center;
       font-weight: bold;
       margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
+    #hintText.success {
+      background-color: #28a745;
+      color: white;
+    }
+    #hintText.error {
+      background-color: #dc3545;
+      color: white;
     }
     .member {
       background: #f4f4f4;
@@ -100,7 +111,6 @@
   <script>
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // Format DOB for saving
     function formatToDDMMMYYYY(dateStr) {
       const date = new Date(dateStr);
       if (isNaN(date)) return "";
@@ -108,7 +118,6 @@
       return date.toLocaleDateString("en-GB", options).replace(/ /g, "-");
     }
 
-    // Calculate age
     function calculateAgeExact(dob) {
       const birth = new Date(dob);
       const diff = Date.now() - birth.getTime();
@@ -136,12 +145,10 @@
       document.getElementById("familyMembers").appendChild(div);
     });
 
-    // Show age live
     document.getElementById("dob").addEventListener("change", function() {
       document.getElementById("age").value = calculateAgeExact(this.value);
     });
 
-    // Duplicate check
     async function checkDuplicate(name, lastname, dobFormatted) {
       const url = `${sheetURL}/search?Name=${encodeURIComponent(name)}&Lastname=${encodeURIComponent(lastname)}&DateOfBirth=${encodeURIComponent(dobFormatted)}`;
       try {
@@ -154,12 +161,12 @@
       }
     }
 
-    // Form submission
     document.getElementById("regForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const hint = document.getElementById("hintText");
+      hint.style.display = "none";
+      hint.className = "";
       hint.textContent = "";
-      hint.style.color = "#dc3545"; // red default
 
       const name = document.getElementById("name").value.trim();
       const lastname = document.getElementById("lastname").value.trim();
@@ -168,6 +175,8 @@
 
       const duplicate = await checkDuplicate(name, lastname, dobFormatted);
       if (duplicate) {
+        hint.style.display = "block";
+        hint.className = "error";
         hint.textContent = "⚠️ You have already registered!";
         return;
       }
@@ -210,13 +219,16 @@
           });
         }
 
-        hint.style.color = "#28a745";
+        hint.style.display = "block";
+        hint.className = "success";
         hint.textContent = "✅ Registration successful!";
         document.getElementById("regForm").reset();
         document.getElementById("familyMembers").innerHTML = "";
         document.getElementById("age").value = "";
       } catch (err) {
         console.error("Save error:", err);
+        hint.style.display = "block";
+        hint.className = "error";
         hint.textContent = "Error saving registration. Please try again.";
       }
     });
