@@ -42,7 +42,6 @@
       font-weight:700;
     }
 
-    /* language line */
     .lang-row {
       display:flex;
       align-items:center;
@@ -53,23 +52,12 @@
     .lang-row .globe { font-size:18px; margin-right:6px; }
     .lang-row label { font-weight:600; color:#222; display:flex; align-items:center; gap:8px; }
 
-    /* main card */
     .card {
       background: var(--card-bg);
       border-radius:12px;
       padding:18px;
       box-shadow: 0 8px 28px rgba(15,20,25,0.08);
       border:1px solid rgba(0,0,0,0.04);
-    }
-    .form-row {
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-bottom:12px;
-    }
-    .form-row .col {
-      flex:1;
-      min-width:0;
     }
     .form-group {
       display:flex;
@@ -93,10 +81,7 @@
     }
     .star { color:#d93025; margin-left:6px; }
 
-    /* family members card (separate section) */
-    .section {
-      margin-top:18px;
-    }
+    .section { margin-top:18px; }
     #familyMembers { margin-top:6px; }
 
     .member {
@@ -111,15 +96,14 @@
       background:var(--danger);
       color:white;
       border:none;
-      padding:4px 6px; /* Reduced padding */
+      padding:4px 6px;
       border-radius:6px;
       cursor:pointer;
-      font-size:12px; /* Smaller font size */
-      width: 50%; /* Makes the button half the size of the container */
-      display: inline-block; /* Ensures it stays inline with other elements */
+      font-size:12px;
+      width: 50%;
+      display: inline-block;
     }
 
-    /* buttons */
     .btn {
       width:100%;
       padding:12px;
@@ -132,7 +116,6 @@
     .btn-primary { background:var(--accent); color:white; }
     .btn-add { background:#0b79d0; color:white; margin-top:6px; }
 
-    /* toast */
     #toastMessage {
       position:fixed;
       left:50%;
@@ -148,7 +131,6 @@
       cursor:pointer;
     }
 
-    /* small screens adjust */
     @media (max-width:520px){
       .form-group label { width:120px; font-size:13px; }
       .header img.logo { width:90px; }
@@ -163,7 +145,7 @@
         <h1 class="title">Registration for Imamat Day Celebration</h1>
       </div>
 
-      <div class="lang-row" style="margin-bottom:8px;">
+      <div class="lang-row">
         <span class="globe">🌐</span>
         <label for="langSelect">Language:</label>
         <select id="langSelect" aria-label="Language select" style="width:150px; padding:8px; border-radius:8px; border:1px solid #d9d9d9;">
@@ -173,20 +155,11 @@
         </select>
       </div>
 
-      <div class="card" role="region" aria-label="registration form">
+      <div class="card">
         <form id="regForm">
-          <div class="form-group">
-            <label for="name">Name <span class="star">*</span></label>
-            <input id="name" type="text" required />
-          </div>
-
-          <div class="form-group">
-            <label for="lastname">Lastname <span class="star">*</span></label>
-            <input id="lastname" type="text" required />
-          </div>
-
-          <div class="form-group">
-            <label for="gender">Gender <span class="star">*</span></label>
+          <div class="form-group"><label for="name">Name <span class="star">*</span></label><input id="name" type="text" required /></div>
+          <div class="form-group"><label for="lastname">Lastname <span class="star">*</span></label><input id="lastname" type="text" required /></div>
+          <div class="form-group"><label for="gender">Gender <span class="star">*</span></label>
             <select id="gender" required>
               <option value="">Select</option>
               <option value="Male">Male</option>
@@ -194,384 +167,139 @@
               <option value="Other">Other</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label for="phone">Phone <span class="star">*</span></label>
-            <input id="phone" type="text" required />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email <span class="star">*</span></label>
-            <input id="email" type="email" required />
-          </div>
-
-          <div class="form-group">
-            <label for="dob">Date of Birth <span class="star">*</span></label>
-            <input id="dob" type="date" required />
-          </div>
-
-          <div class="form-group">
-            <label for="age">Age</label>
-            <input id="age" type="text" readonly />
-          </div>
+          <div class="form-group"><label for="phone">Phone <span class="star">*</span></label><input id="phone" type="text" required /></div>
+          <div class="form-group"><label for="email">Email <span class="star">*</span></label><input id="email" type="email" required /></div>
+          <div class="form-group"><label for="dob">Date of Birth <span class="star">*</span></label><input id="dob" type="date" required /></div>
+          <div class="form-group"><label for="age">Age</label><input id="age" type="text" readonly /></div>
 
           <div class="section">
-            <div style="display:flex; gap:12px; align-items:center; justify-content:space-between;">
-              <h3 style="margin:0; font-size:16px;" id="familyTitle">Family Members</h3>
-            </div>
-
+            <h3 id="familyTitle" style="margin:0; font-size:16px;">Family Members</h3>
             <div id="familyMembers"></div>
-
-            <div style="margin-top:8px;">
-              <button type="button" id="addFamilyBtn" class="btn btn-add">+ Add Family Member</button>
-            </div>
+            <button type="button" id="addFamilyBtn" class="btn btn-add">+ Add Family Member</button>
           </div>
 
-          <div style="margin-top:14px;">
-            <button type="submit" id="registerBtn" class="btn btn-primary">Register</button>
-          </div>
+          <button type="submit" id="registerBtn" class="btn btn-primary" style="margin-top:14px;">Register</button>
         </form>
       </div>
     </div>
   </div>
 
-  <div id="toastMessage" role="status" aria-live="polite"></div>
+  <div id="toastMessage"></div>
 
   <script>
-    // YOUR SheetDB API
     const sheetURL = "https://sheetdb.io/api/v1/095eetx6hrw1i";
 
-    // translations (labels and relation options)
     const translations = {
-      en: {
-        title: "Registration for Imamat Day Celebration",
-        name: "Name",
-        lastname: "Lastname",
-        gender: "Gender",
-        select: "Select",
-        phone: "Phone",
-        email: "Email",
-        dob: "Date of Birth",
-        age: "Age",
-        addMember: "+ Add Family Member",
-        register: "Register",
-        remove: "Remove",
-        familyTitle: "Family Members",
-        msgDuplicate: "STOP: You have already registered",
-        msgSaved: "✅ Registration submitted successfully!",
-        msgFill: "Please fill required fields",
-        relationOptions: ["Wife","Husband","Son","Daughter","Brother","Sister","Father","Mother","Other"],
-        mainRelationSingle: "Single"
-      },
-      de: {
-        title: "Anmeldung zur Imamat-Tag Feier",
-        name: "Vorname",
-        lastname: "Nachname",
-        gender: "Geschlecht",
-        select: "Auswählen",
-        phone: "Telefon",
-        email: "E-Mail",
-        dob: "Geburtsdatum",
-        age: "Alter",
-        addMember: "+ Familienmitglied hinzufügen",
-        register: "Registrieren",
-        remove: "Entfernen",
-        familyTitle: "Familienmitglieder",
-        msgDuplicate: "STOP: Sie haben sich bereits registriert",
-        msgSaved: "✅ Registrierung erfolgreich eingereicht!",
-        msgFill: "Bitte füllen Sie die erforderlichen Felder aus",
-        relationOptions: ["Ehefrau","Ehemann","Sohn","Tochter","Bruder","Schwester","Vater","Mutter","Andere"],
-        mainRelationSingle: "Single"
-      },
-      fa: {
-        title: "ثبت نام برای جشن روز امامت",
-        name: "نام",
-        lastname: "نام خانوادگی",
-        gender: "جنسیت",
-        select: "انتخاب کنید",
-        phone: "تلفن",
-        email: "ایمیل",
-        dob: "تاریخ تولد",
-        age: "سن",
-        addMember: "+ افزودن عضو خانواده",
-        register: "ثبت نام",
-        remove: "حذف",
-        familyTitle: "اعضای خانواده",
-        msgDuplicate: "STOP: شما قبلاً ثبت نام کرده‌اید",
-        msgSaved: "✅ ثبت‌نام با موفقیت ارسال شد!",
-        msgFill: "لطفاً فیلدهای مورد نیاز را پر کنید",
-        relationOptions: ["همسر","شوهر","پسر","دختر","برادر","خواهر","پدر","مادر","سایر"],
-        mainRelationSingle: "Single"
-      }
+      en: {title:"Registration for Imamat Day Celebration",select:"Select",relationOptions:["Wife","Husband","Son","Daughter","Brother","Sister","Father","Mother","Other"],mainRelationSingle:"Single"},
+      de: {title:"Anmeldung zur Imamat-Tag Feier",select:"Auswählen",relationOptions:["Ehefrau","Ehemann","Sohn","Tochter","Bruder","Schwester","Vater","Mutter","Andere"],mainRelationSingle:"Single"},
+      fa: {title:"ثبت نام برای جشن روز امامت",select:"انتخاب کنید",relationOptions:["همسر","شوهر","پسر","دختر","برادر","خواهر","پدر","مادر","سایر"],mainRelationSingle:"Single"}
     };
 
-    // UI elements
-    const langSelect = document.getElementById("langSelect");
-    const titleEl = document.querySelector(".title");
-    const labels = {
-      name: document.querySelector('label[for="name"]'),
-      lastname: document.querySelector('label[for="lastname"]'),
-      gender: document.querySelector('label[for="gender"]'),
-      phone: document.querySelector('label[for="phone"]'),
-      email: document.querySelector('label[for="email"]'),
-      dob: document.querySelector('label[for="dob"]'),
-      age: document.querySelector('label[for="age"]')
-    };
-    const addFamilyBtn = document.getElementById("addFamilyBtn");
-    const registerBtn = document.getElementById("registerBtn");
-    const familyTitle = document.getElementById("familyTitle");
-    const familyMembers = document.getElementById("familyMembers");
-    const mainDob = document.getElementById("dob");
-    const mainAge = document.getElementById("age");
-    const toastEl = document.getElementById("toastMessage");
+    const langSelect=document.getElementById("langSelect");
+    const mainDob=document.getElementById("dob");
+    const mainAge=document.getElementById("age");
+    const familyMembers=document.getElementById("familyMembers");
+    const toastEl=document.getElementById("toastMessage");
 
-    // small helper to show toast
-    function showToast(text, color='var(--danger)', timeout=3000){
-      toastEl.textContent = text;
-      toastEl.style.background = color;
-      toastEl.style.display = 'block';
-      setTimeout(()=> toastEl.style.display = 'none', timeout);
+    function showToast(text,color='var(--danger)',timeout=3000){
+      toastEl.textContent=text;toastEl.style.background=color;toastEl.style.display='block';
+      setTimeout(()=>toastEl.style.display='none',timeout);
     }
 
-    // calculate age from yyyy-mm-dd date string
-    function calcAgeFromDateString(dateStr) {
-      if (!dateStr) return "";
-      const dob = new Date(dateStr);
-      if (isNaN(dob)) return "";
-      const today = new Date();
-      let age = today.getFullYear() - dob.getFullYear();
-      const m = today.getMonth() - dob.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-      return age >= 0 ? String(age) : "";
+    function calcAgeFromDateString(dateStr){
+      if(!dateStr)return "";
+      const dob=new Date(dateStr);if(isNaN(dob))return "";
+      const today=new Date();let age=today.getFullYear()-dob.getFullYear();
+      const m=today.getMonth()-dob.getMonth();
+      if(m<0||(m===0&&today.getDate()<dob.getDate()))age--;
+      return age>=0?String(age):"";
     }
 
-    // MAIN DOB -> AGE auto-calc
-    mainDob.addEventListener("change", () => {
-      mainAge.value = calcAgeFromDateString(mainDob.value);
-    });
+    mainDob.addEventListener("change",()=>{mainAge.value=calcAgeFromDateString(mainDob.value);});
 
-    // LANGUAGE SWITCH - preserve star spans
-    function setLabelTextPreserveStar(labelEl, text){
-      if(!labelEl) return;
-      if(labelEl.childNodes.length && labelEl.childNodes[0].nodeType === Node.TEXT_NODE){
-        labelEl.childNodes[0].nodeValue = text + " ";
-      } else {
-        const star = labelEl.querySelector(".star") ? labelEl.querySelector(".star").outerHTML : "";
-        labelEl.innerHTML = text + (star ? " " + star : "");
-      }
-    }
-
-    langSelect.addEventListener("change", () => {
-      const lang = langSelect.value || 'en';
-      const t = translations[lang] || translations.en;
-
-      titleEl.textContent = t.title;
-      setLabelTextPreserveStar(labels.name, t.name);
-      setLabelTextPreserveStar(labels.lastname, t.lastname);
-      setLabelTextPreserveStar(labels.gender, t.gender);
-      setLabelTextPreserveStar(labels.phone, t.phone);
-      setLabelTextPreserveStar(labels.email, t.email);
-      setLabelTextPreserveStar(labels.dob, t.dob);
-      setLabelTextPreserveStar(labels.age, t.age);
-
-      addFamilyBtn.textContent = t.addMember;
-      registerBtn.textContent = t.register;
-      familyTitle.textContent = t.familyTitle;
-
-      // update existing member blocks if any
-      document.querySelectorAll('.member').forEach(memberDiv => {
-        const mNameLabel = memberDiv.querySelector('label[data-key="m-name"]');
-        const mLastLabel = memberDiv.querySelector('label[data-key="m-last"]');
-        const mRelationLabel = memberDiv.querySelector('label[data-key="m-relation"]');
-        const mGenderLabel = memberDiv.querySelector('label[data-key="m-gender"]');
-        const mDobLabel = memberDiv.querySelector('label[data-key="m-dob"]');
-        const mAgeLabel = memberDiv.querySelector('label[data-key="m-age"]');
-        const removeBtn = memberDiv.querySelector('.removeBtn');
-        const relSelect = memberDiv.querySelector('select[data-key="m-relation-select"]');
-        const genderSelect = memberDiv.querySelector('select[data-key="m-gender-select"]');
-
-        setLabelTextPreserveStar(mNameLabel, t.name);
-        setLabelTextPreserveStar(mLastLabel, t.lastname);
-        setLabelTextPreserveStar(mRelationLabel, "Relation");
-        setLabelTextPreserveStar(mGenderLabel, t.gender);
-        setLabelTextPreserveStar(mDobLabel, t.dob);
-        setLabelTextPreserveStar(mAgeLabel, t.age);
-        if(removeBtn) removeBtn.textContent = t.remove;
-
-        // update relation options preserving value if possible
-        if(relSelect){
-          const cur = relSelect.value;
-          relSelect.innerHTML = `<option value="">${t.select}</option>` + t.relationOptions.map(r => `<option value="${r}">${r}</option>`).join('');
-          if([...relSelect.options].some(o=>o.value===cur)) relSelect.value = cur;
-        }
-
-        // update gender options text
-        if(genderSelect){
-          const curg = genderSelect.value;
-          const maleText = lang === 'fa' ? 'مرد' : (lang === 'de' ? 'Männlich' : 'Male');
-          const femaleText = lang === 'fa' ? 'زن' : (lang === 'de' ? 'Weiblich' : 'Female');
-          const otherText = lang === 'fa' ? 'دیگر' : (lang === 'de' ? 'Andere' : 'Other');
-          genderSelect.innerHTML = `<option value="">${t.select}</option>
-            <option value="Male">${maleText}</option>
-            <option value="Female">${femaleText}</option>
-            <option value="Other">${otherText}</option>`;
-          if(["Male","Female","Other"].includes(curg)) genderSelect.value = curg;
-        }
-      });
-    });
-
-    // ADD FAMILY MEMBER — includes Relation, DOB, Age, Gender, Remove
-    addFamilyBtn.addEventListener("click", () => {
-      const lang = langSelect.value || 'en';
-      const t = translations[lang] || translations.en;
-      const maleText = lang === 'fa' ? 'مرد' : (lang === 'de' ? 'Männlich' : 'Male');
-      const femaleText = lang === 'fa' ? 'زن' : (lang === 'de' ? 'Weiblich' : 'Female');
-      const otherText = lang === 'fa' ? 'دیگر' : (lang === 'de' ? 'Andere' : 'Other');
-
-      const div = document.createElement('div');
-      div.className = 'member';
-
-      div.innerHTML = `
-        <div class="form-group"><label data-key="m-name">${t.name} <span class="star">*</span></label><input type="text" data-key="m-name-input" required></div>
-        <div class="form-group"><label data-key="m-last">${t.lastname} <span class="star">*</span></label><input type="text" data-key="m-last-input" required></div>
+    document.getElementById("addFamilyBtn").addEventListener("click",()=>{
+      const lang=langSelect.value||"en";
+      const t=translations[lang]||translations.en;
+      const div=document.createElement("div");
+      div.className="member";
+      div.innerHTML=`
+        <div class="form-group"><label data-key="m-name">Name <span class="star">*</span></label><input type="text" data-key="m-name-input" required></div>
+        <div class="form-group"><label data-key="m-last">Lastname <span class="star">*</span></label><input type="text" data-key="m-last-input" required></div>
         <div class="form-group"><label data-key="m-relation">Relation <span class="star">*</span></label>
           <select data-key="m-relation-select" required>
             <option value="">${t.select}</option>
-            ${t.relationOptions.map(r => `<option value="${r}">${r}</option>`).join('')}
+            ${t.relationOptions.map(r=>`<option value="${r}">${r}</option>`).join("")}
           </select>
         </div>
-        <div class="form-group"><label data-key="m-gender">${t.gender} <span class="star">*</span></label>
+        <div class="form-group"><label data-key="m-gender">Gender <span class="star">*</span></label>
           <select data-key="m-gender-select" required>
             <option value="">${t.select}</option>
-            <option value="Male">${maleText}</option>
-            <option value="Female">${femaleText}</option>
-            <option value="Other">${otherText}</option>
+            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
           </select>
         </div>
-        <div class="form-group"><label data-key="m-dob">${t.dob} <span class="star">*</span></label><input type="date" data-key="m-dob-input" required></div>
-        <div class="form-group"><label data-key="m-age">${t.age}</label><input type="text" data-key="m-age-input" readonly></div>
-        <button type="button" class="removeBtn">${t.remove}</button>
+        <div class="form-group"><label data-key="m-dob">Date of Birth <span class="star">*</span></label><input type="date" data-key="m-dob-input" required></div>
+        <div class="form-group"><label data-key="m-age">Age</label><input type="text" data-key="m-age-input" readonly></div>
+        <button type="button" class="removeBtn">Remove</button>
       `;
-
-      // remove handler
-      const removeBtn = div.querySelector('.removeBtn');
-      removeBtn.addEventListener('click', () => div.remove());
-
-      // member dob -> age
-      const mDobInput = div.querySelector('input[data-key="m-dob-input"]');
-      const mAgeInput = div.querySelector('input[data-key="m-age-input"]');
-      mDobInput.addEventListener('change', () => {
-        mAgeInput.value = calcAgeFromDateString(mDobInput.value);
-      });
-
+      div.querySelector(".removeBtn").addEventListener("click",()=>div.remove());
+      const dob=div.querySelector('input[data-key="m-dob-input"]');
+      const age=div.querySelector('input[data-key="m-age-input"]');
+      dob.addEventListener("change",()=>{age.value=calcAgeFromDateString(dob.value);});
       familyMembers.appendChild(div);
     });
 
-    // Initialize UI text per selected language at load
-    (function initLang(){ langSelect.dispatchEvent(new Event('change')); })();
-
-    // ====== SUBMIT: duplicate check + save all persons (main + family members) ======
-    document.getElementById('regForm').addEventListener('submit', async function(e){
+    document.getElementById("regForm").addEventListener("submit",async function(e){
       e.preventDefault();
-      const lang = langSelect.value || 'en';
-      const t = translations[lang] || translations.en;
+      const mainName=document.getElementById("name").value.trim();
+      const mainLastname=document.getElementById("lastname").value.trim();
+      const mainGender=document.getElementById("gender").value;
+      const mainPhone=document.getElementById("phone").value.trim();
+      const mainEmail=document.getElementById("email").value.trim();
+      const mainDOB=document.getElementById("dob").value.trim();
+      const mainAgeVal=document.getElementById("age").value.trim();
 
-      // collect main person
-      const mainName = document.getElementById('name').value.trim();
-      const mainLastname = document.getElementById('lastname').value.trim();
-      const mainGender = document.getElementById('gender').value;
-      const mainPhone = document.getElementById('phone').value.trim();
-      const mainEmail = document.getElementById('email').value.trim();
-      const mainDOB = document.getElementById('dob').value.trim();
-      const mainAgeVal = document.getElementById('age').value.trim();
+      if(!mainName||!mainLastname||!mainDOB){showToast("Please fill required fields");return;}
 
-      if(!mainName || !mainLastname || !mainDOB){
-        showToast(t.msgFill, 'var(--danger)');
-        return;
-      }
-
-      // prepare persons array: main + each family member as separate person
-      const persons = [];
-      // main: relation Single (as requested)
+      const persons=[];
+      // ✅ main registrant always Family Admin
       persons.push({
-        name: mainName,
-        Lastname: mainLastname,
-        gender: mainGender || '',
-        Phone: mainPhone || '',
-        Email: mainEmail || '',
-        DateOfBirth: mainDOB,
-        Age: mainAgeVal || '',
-        Relation: t.mainRelationSingle
+        name:mainName,
+        Lastname:mainLastname,
+        gender:mainGender||'',
+        Phone:mainPhone||'',
+        Email:mainEmail||'',
+        DateOfBirth:mainDOB,
+        Age:mainAgeVal||'',
+        Relation:"Family Admin"
       });
 
-      // family members
-      document.querySelectorAll('.member').forEach(memberDiv => {
-        const mName = (memberDiv.querySelector('input[data-key="m-name-input"]')?.value || '').trim();
-        const mLast = (memberDiv.querySelector('input[data-key="m-last-input"]')?.value || '').trim();
-        const mRelation = (memberDiv.querySelector('select[data-key="m-relation-select"]')?.value || '').trim();
-        const mGender = (memberDiv.querySelector('select[data-key="m-gender-select"]')?.value || '').trim();
-        const mDOB = (memberDiv.querySelector('input[data-key="m-dob-input"]')?.value || '').trim();
-        const mAge = (memberDiv.querySelector('input[data-key="m-age-input"]')?.value || '').trim();
-
-        // only include fully filled family members (you can adjust required logic)
-        if(mName && mLast && mDOB && mRelation){
-          persons.push({
-            name: mName,
-            Lastname: mLast,
-            gender: mGender || '',
-            Phone: '', // family members have no phone/email fields in UI — left blank
-            Email: '',
-            DateOfBirth: mDOB,
-            Age: mAge || '',
-            Relation: mRelation
-          });
+      document.querySelectorAll(".member").forEach(m=>{
+        const mName=m.querySelector('input[data-key="m-name-input"]').value.trim();
+        const mLast=m.querySelector('input[data-key="m-last-input"]').value.trim();
+        const mRel=m.querySelector('select[data-key="m-relation-select"]').value.trim();
+        const mGen=m.querySelector('select[data-key="m-gender-select"]').value.trim();
+        const mDOB=m.querySelector('input[data-key="m-dob-input"]').value.trim();
+        const mAge=m.querySelector('input[data-key="m-age-input"]').value.trim();
+        if(mName&&mLast&&mDOB&&mRel){
+          persons.push({name:mName,Lastname:mLast,gender:mGen,Phone:'',Email:'',DateOfBirth:mDOB,Age:mAge,Relation:mRel});
         }
       });
-
-      if(persons.length === 0){
-        showToast(t.msgFill, 'var(--danger)');
-        return;
-      }
 
       try{
-        // Duplicate check: check every person individually
         for(const p of persons){
-          const checkURL = `${sheetURL}/search?name=${encodeURIComponent(p.name)}&Lastname=${encodeURIComponent(p.Lastname)}&DateOfBirth=${encodeURIComponent(p.DateOfBirth)}`;
-          const res = await fetch(checkURL);
-          const data = await res.json();
-          if(Array.isArray(data) && data.length > 0){
-            // duplicate found for this exact person
-            showToast(`${t.msgDuplicate} — ${p.name} ${p.Lastname}`, 'var(--danger)', 4000);
-            return; // stop entire submission
-          }
+          const checkURL=`${sheetURL}/search?name=${encodeURIComponent(p.name)}&Lastname=${encodeURIComponent(p.Lastname)}&DateOfBirth=${encodeURIComponent(p.DateOfBirth)}`;
+          const res=await fetch(checkURL);const data=await res.json();
+          if(Array.isArray(data)&&data.length>0){showToast(`STOP: You have already registered — ${p.name} ${p.Lastname}`);return;}
         }
 
-        // No duplicates: save all persons in one POST (SheetDB accepts bulk data array)
-        const payload = { data: persons };
-        const saveRes = await fetch(sheetURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
+        const payload={data:persons};
+        const saveRes=await fetch(sheetURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
         if(saveRes.ok){
-          showToast(t.msgSaved, 'var(--success)', 3500);
-          // reset form and remove family members
-          e.target.reset();
-          mainAge.value = '';
-          familyMembers.innerHTML = '';
-          // re-init language texts after reset
-          langSelect.dispatchEvent(new Event('change'));
-        } else {
-          showToast('Error submitting form', 'var(--danger)', 3500);
-        }
-
-      } catch(err){
-        console.error(err);
-        showToast('Network error', 'var(--danger)', 3500);
-      }
+          showToast("✅ Registration submitted successfully!","var(--success)",3500);
+          e.target.reset();mainAge.value='';familyMembers.innerHTML='';
+        }else showToast("Error submitting form");
+      }catch(err){console.error(err);showToast("Network error");}
     });
-
   </script>
 </body>
 </html>
